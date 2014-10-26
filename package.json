@@ -1,0 +1,15 @@
+{
+  "name": "fb-data",
+  "version": "1.0.0",
+  "description": "simple app for parsing fb data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fast-html-parser": "^1.0.0",
+    "sentiment": "^1.0.2"
+  }
+}
