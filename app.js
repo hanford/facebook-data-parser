@@ -1,17 +1,9 @@
 var fs = require('fs');
+var sentiment = require('sentiment');
 var HTMLParser = require('fast-html-parser');
 
 fs.readFile('./data/messages.htm', function(err, content) {
   if (err) throw err;
-
-  var name = {};
-  var word = {};
-  var phrase = {};
-
-  var namesList = [];
-  var wordList = [];
-  var phraseList = [];
-
   var root = HTMLParser.parse(content.toString());
   var user = root.querySelectorAll('.user');
   var message = root.querySelectorAll('p');
@@ -22,14 +14,20 @@ fs.readFile('./data/messages.htm', function(err, content) {
     for (var item in dict)
       newArr.push([item, dict[item]])
 
-    console.log(newArr);
-
     newArr.sort(function(a, b) {
       return a[1] - b[1]
     })
 
     return newArr;
   }
+
+  var name = {};
+  var word = {};
+  var phrase = {};
+
+  var namesList = [];
+  var wordList = [];
+  var phraseList = [];
 
   message.map(function(element, idx) {
     if (element.childNodes.length == 0) return;
@@ -56,7 +54,11 @@ fs.readFile('./data/messages.htm', function(err, content) {
   wordList = bringTogether(word);
   namesList = bringTogether(name);
 
-  console.log(wordList)
+  var data = JSON.stringify({ 'Phrases': phraseList, 'Words': wordList, 'Names': namesList }, null, 2);
+  fs.writeFile('data.json', data, function (err) {
+    if (err) throw err;
+    console.log('It\'s saved!');
+  });
 
 
 })
