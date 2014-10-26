@@ -8,14 +8,29 @@ fs.readFile('./data/messages.htm', function(err, content) {
   var user = root.querySelectorAll('.user');
   var message = root.querySelectorAll('p');
 
-  var bringTogether = function (dict) {
+  var bringTogether = function (dict, options) {
     var newArr = [];
 
     for (var item in dict)
-      newArr.push([item, dict[item]])
+      newArr.push([item, {occur: dict[item]}])
+
+    if (options && options.sentiment) {
+      newArr = newArr.map(function(item) {
+        var phrase = item[0];
+        var val = item[1];
+
+        val.rating = sentiment(phrase);
+
+        console.log('item :>');
+        console.log(item);
+        console.log(val);
+
+        return [phrase, val];
+      });
+    }
 
     newArr.sort(function(a, b) {
-      return a[1] - b[1]
+      return a[1].occur - b[1].occur;
     })
 
     return newArr;
@@ -34,6 +49,7 @@ fs.readFile('./data/messages.htm', function(err, content) {
 
     if (element.childNodes && element.childNodes[0].rawText) {
       var text = element.childNodes.pop().rawText.toLowerCase();
+      var sentimentRating = sentiment(text);
       phrase[text] ? phrase[text] ++ : phrase[text] = 1;
 
       var eachWordArray = text.split(' ');
@@ -50,7 +66,7 @@ fs.readFile('./data/messages.htm', function(err, content) {
     name[currName] ? name[currName] ++ : name[currName] = 1;
   })
 
-  phraseList = bringTogether(phrase);
+  phraseList = bringTogether(phrase, {sentiment: true});
   wordList = bringTogether(word);
   namesList = bringTogether(name);
 
