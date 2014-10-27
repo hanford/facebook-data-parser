@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-  <meta charset="utf-8">
-  <head>
-    <title>Facebook Visualization</title>
-    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-  </head>
-  <body>
+<meta charset="utf-8">
+<head>
+  <title>Facebook Visualization</title>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="assets/css/base.css">
+  <script type="text/javascript" src="bower_components/chartjs/Chart.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
 
-  </body>
+
+</head>
+<body>
+  <div ng-app="chartApp" ng-controller="SalesController">
+    
+    <div class="center">
+      <h3>Most popular day you send facebook messages</h3>
+      <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend height="300px" width="600px"></canvas>
+    </div>
+
+
+  </div>
+</body>
+  <script type="text/javascript" src="assets/js/app.js"></script>
 </html>

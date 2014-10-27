@@ -2,11 +2,12 @@ var fs = require('fs');
 var sentiment = require('sentiment');
 var HTMLParser = require('fast-html-parser');
 
-fs.readFile('./data/messages.htm', function(err, content) {
+fs.readFile('./facebook/html/messages.htm', function(err, content) {
   if (err) throw err;
   var root = HTMLParser.parse(content.toString());
   var user = root.querySelectorAll('.user');
   var message = root.querySelectorAll('p');
+  var time = root.querySelectorAll('.meta');
 
   var bringTogether = function (dict, options) {
     var newArr = [];
@@ -14,38 +15,71 @@ fs.readFile('./data/messages.htm', function(err, content) {
     for (var item in dict)
       newArr.push([item, {occur: dict[item]}])
 
-    if (options && options.sentiment) {
-      newArr = newArr.map(function(item) {
-        var phrase = item[0];
-        var val = item[1];
+    if (options) {
+      if (options.sentiment) {
+        newArr = newArr.map(function(item) {
+          var phrase = item[0];
+          var val = item[1];
+          val.rating = sentiment(phrase);
 
-        val.rating = sentiment(phrase);
-
-        console.log('item :>');
-        console.log(item);
-        console.log(val);
-
-        return [phrase, val];
-      });
+          return [phrase, val];
+        });
+      }
     }
 
     newArr.sort(function(a, b) {
-      return a[1].occur - b[1].occur;
+
+      if (options && options.times) {
+        return a[1].occur.count - b[1].occur.count;
+      } else {
+        return a[1].occur - b[1].occur;
+      }
     })
 
-    return newArr;
+    return newArr.filter(function(item) {
+      if (options && options.times) {
+        return item[1].occur.count > 1
+      } else {
+        return item[1].occur > 5
+      }
+    });
   }
 
   var name = {};
   var word = {};
+  var date = {};
   var phrase = {};
+  var times = {};
+
+  var dayCount = {};
 
   var namesList = [];
   var wordList = [];
   var phraseList = [];
 
   message.map(function(element, idx) {
-    if (element.childNodes.length == 0) return;
+    if (element.childNodes.length == 0) return; 
+    var timestamp = time[idx].childNodes[0].rawText;
+    var userName = user[idx].childNodes[0].rawText;
+
+    if (userName === 'Jack Hanford') {
+      return;
+    }
+
+    if (!times[timestamp]) {
+      times[timestamp] = {
+        count: 0
+      };
+    }
+
+    if (!times[timestamp][userName]) {
+      times[timestamp][userName] = {
+        messages: 0
+      };
+    }
+
+    times[timestamp].count++;
+    times[timestamp][userName].messages++;
 
     if (element.childNodes && element.childNodes[0].rawText) {
       var text = element.childNodes.pop().rawText.toLowerCase();
@@ -69,8 +103,23 @@ fs.readFile('./data/messages.htm', function(err, content) {
   phraseList = bringTogether(phrase, {sentiment: true});
   wordList = bringTogether(word);
   namesList = bringTogether(name);
+  timesList = bringTogether(times, {times: true});
 
-  var data = JSON.stringify({ 'Phrases': phraseList, 'Words': wordList, 'Names': namesList }, null, 2);
+  timesList.map(function(element) {
+    var frequency = 0;
+    var day = element[0].split(',')[0];
+
+    dayCount[day] ? dayCount[day] ++ : dayCount[day] = 1;
+  });
+
+  // var data = JSON.stringify({ 'Phrases': phraseList, 'Words': wordList, 'Names': namesList }, null, 2);
+  var data = JSON.stringify({
+    'Words': wordList,
+    'Phrases': wordList,
+    'Names': namesList,
+    'Timestamps': timesList,
+    'Days': dayCount
+  })
   fs.writeFile('data.json', data, function (err) {
     if (err) throw err;
     console.log('It\'s saved!');

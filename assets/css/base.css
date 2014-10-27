@@ -1,0 +1,10 @@
+html {
+	background: whitesmoke;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
