@@ -1,1 +1,1 @@
-parse data downloaded from facebook
+parse data downloaded from facebook, bower i, npm install, drag facebook zip into this root this file extract, rename facebook, node app. Will shorten that process in the future ;)

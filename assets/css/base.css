@@ -8,3 +8,14 @@ html {
   margin: 0 auto;
   display: block;
 }
+
+input {
+  border: none;
+  border-radius: 4px;
+  background: none repeat scroll 0% 0% rgb(255, 255, 255);
+  padding: 10px;
+  width: 200px;
+  margin-bottom: 10px;
+  outline: none;
+  box-shadow: inset 0 -2px 0 rgba(132, 132, 132, 0.27);
+}

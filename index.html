@@ -7,18 +7,19 @@
   <script type="text/javascript" src="bower_components/chartjs/Chart.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
-
-
 </head>
 <body>
-  <div ng-app="chartApp" ng-controller="SalesController">
-    
+  <div ng-app="fbDataApp" ng-controller="fbDataCtrl">
     <div class="center">
-      <h3>Most popular day you send facebook messages</h3>
+      <h3>Most popular day you participate in messages</h3>
       <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend height="300px" width="600px"></canvas>
+      <br />
+      <div class="col-md-6">
+        <h4>Most used words</h4>
+        <input ng-model="search" type="text" class="input">
+        <div ng-repeat="word in words | filter:search" ng-show="search">{{word}}</div>
+      </div>
     </div>
-
-
   </div>
 </body>
   <script type="text/javascript" src="assets/js/app.js"></script>

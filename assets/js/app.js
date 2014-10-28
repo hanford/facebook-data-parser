@@ -1,22 +1,24 @@
-var app = angular.module('chartApp', ['tc.chartjs']);
+var app = angular.module('fbDataApp', ['tc.chartjs']);
 
-app.controller('SalesController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http){
+app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http){
   var d;
   $http.get('../../data.json').success(function(response) {
-    d = response.Days;
-    console.log()
+    day = response.Days;
+    $scope.words = response.Words.reverse();
+    $scope.phrases = response.Phrases;
+    console.log(response)
     $scope.data = {
       labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       datasets: [
       {
-        label: 'My Second dataset',
+        label: 'Most active messenger days',
         fillColor: 'rgba(151,187,205,0.2)',
         strokeColor: 'rgba(151,187,205,1)',
         pointColor: 'rgba(151,187,205,1)',
         pointStrokeColor: '#fff',
         pointHighlightFill: '#fff',
         pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [d['Monday'], d['Tuesday'], d['Wednesday'], d['Thursday'], d['Friday'], d['Saturday'], d['Sunday']]
+        data: [day['Monday'], day['Tuesday'], day['Wednesday'], day['Thursday'], day['Friday'], day['Saturday'], day['Sunday']]
       }
       ]
     };

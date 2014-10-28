@@ -40,7 +40,7 @@ fs.readFile('./facebook/html/messages.htm', function(err, content) {
       if (options && options.times) {
         return item[1].occur.count > 1
       } else {
-        return item[1].occur > 5
+        return item[1].occur > 2
       }
     });
   }
@@ -84,7 +84,10 @@ fs.readFile('./facebook/html/messages.htm', function(err, content) {
     if (element.childNodes && element.childNodes[0].rawText) {
       var text = element.childNodes.pop().rawText.toLowerCase();
       var sentimentRating = sentiment(text);
-      phrase[text] ? phrase[text] ++ : phrase[text] = 1;
+      var charCheck = text.split(' ');
+      if (charCheck.length > 1){
+        phrase[text] ? phrase[text] ++ : phrase[text] = 1;
+      }
 
       var eachWordArray = text.split(' ');
       eachWordArray.map(function(item) {
@@ -115,7 +118,7 @@ fs.readFile('./facebook/html/messages.htm', function(err, content) {
   // var data = JSON.stringify({ 'Phrases': phraseList, 'Words': wordList, 'Names': namesList }, null, 2);
   var data = JSON.stringify({
     'Words': wordList,
-    'Phrases': wordList,
+    'Phrases': phraseList,
     'Names': namesList,
     'Timestamps': timesList,
     'Days': dayCount
