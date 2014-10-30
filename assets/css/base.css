@@ -19,3 +19,7 @@ input {
   outline: none;
   box-shadow: inset 0 -2px 0 rgba(132, 132, 132, 0.27);
 }
+
+li {
+  list-style: none;
+}

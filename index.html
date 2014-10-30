@@ -11,16 +11,10 @@
 <body>
   <div ng-app="fbDataApp" ng-controller="fbDataCtrl">
     <div class="center">
-      <h3>Most popular day you participate in messages</h3>
-      <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend height="300px" width="600px"></canvas>
-      <br />
-      <div class="col-md-6">
-        <h4>Most used words</h4>
-        <input ng-model="search" type="text" class="input">
-        <div ng-repeat="word in words | filter:search" ng-show="search">{{word}}</div>
-      </div>
+      <h3>facebook data parse</h3>
+        <li ng-repeat="(year, count) in items">{{year}}</li>
     </div>
   </div>
-</body>
   <script type="text/javascript" src="assets/js/app.js"></script>
+</body>
 </html>
