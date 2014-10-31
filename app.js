@@ -21,17 +21,26 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
+
     if (element.childNodes.length == 0) return; 
     var timestamp = time[idx].childNodes[0].rawText;
     var userName = he.decode(user[idx].childNodes[0].rawText);
-    var message = element.childNodes[0].rawText;
-
-    if (userName === 'Jack Hanford') {
+    var messageTxt = he.decode(element.childNodes[0].rawText);
+    
+    if (userName == 'Jack Hanford') {
       return;
     }
 
+    var message = element.childNodes[0].rawText;
+
     // Monday, September 10, 2012 at 10:51pm PDT - Timestamp pre moment
-    var stamp = moment(timestamp, ['MMM DD, YYYY at HH:mmA']);
+    var stamp = moment(timestamp, ['MMMM Do, YYYY at HH:mmA']);
+    var parts = timestamp.split(', ');
+    timestamp = parts.reduce(function(prev, part, idx) {
+      if (idx > 0) {
+        return (prev || '') + ' ' + part; 
+      }
+    }, '');
     var stampYear = stamp.year();
     var stampMonth = stamp.month();
     var stampDay = stamp.day();
@@ -62,19 +71,18 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     messageCount[userName].push(timestamp);
     calendar[stampYear][stampMonth][stampDay][userName].push(timestamp);
-    // message
 
     stream.write(userName + ',' + timestamp + '\n');
   });
 
-  stream.end();
+stream.end();
 
-  
-  var data = JSON.stringify(calendar )
-  fs.writeFile('data.json', data, function (err) {
-    if (err) throw err;
-    console.log('It\'s saved!');
-  });
+
+var data = JSON.stringify(calendar)
+fs.writeFile('data.json', data, function (err) {
+  if (err) throw err;
+  console.log('It\'s saved!');
+});
 
 
 })
