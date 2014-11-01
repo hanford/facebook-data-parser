@@ -26,7 +26,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var timestamp = time[idx].childNodes[0].rawText;
     var userName = he.decode(user[idx].childNodes[0].rawText);
     var messageTxt = he.decode(element.childNodes[0].rawText);
-    
+
     if (userName == 'Jack Hanford') {
       return;
     }
@@ -34,13 +34,15 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var message = element.childNodes[0].rawText;
 
     // Monday, September 10, 2012 at 10:51pm PDT - Timestamp pre moment
-    var stamp = moment(timestamp, ['MMMM Do, YYYY at HH:mmA']);
     var parts = timestamp.split(', ');
+
     timestamp = parts.reduce(function(prev, part, idx) {
       if (idx > 0) {
         return (prev || '') + ' ' + part; 
       }
     }, '');
+
+    var stamp = moment(timestamp, ['MMM DD, YYYY at HH:mmA']);
     var stampYear = stamp.year();
     var stampMonth = stamp.month();
     var stampDay = stamp.day();
@@ -70,7 +72,9 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     }
 
     messageCount[userName].push(timestamp);
-    calendar[stampYear][stampMonth][stampDay][userName].push(timestamp);
+    
+    // Cutting string to remove extra space
+    calendar[stampYear][stampMonth][stampDay][userName].push(timestamp.substring(1));
 
     stream.write(userName + ',' + timestamp + '\n');
   });
