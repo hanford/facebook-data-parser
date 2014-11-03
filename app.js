@@ -1,10 +1,11 @@
 var fs = require('fs');
+var FB = require('fb');
 var moment = require('moment');
 var he = require('he');
 var sentiment = require('sentiment');
 var HTMLParser = require('fast-html-parser');
 
-var messageCount = {};
+// FB.setAccessToken('token')
 
 fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   if (err) throw err;
@@ -14,26 +15,32 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var time = root.querySelectorAll('.meta');
 
 
-  var stream = fs.createWriteStream('output.csv');
-  stream.write('userName, timestamp' + '\n')
+  var stream = fs.createWriteStream('data.csv');
+  stream.write('key, value, date' + '\n');
 
   var calendar = {};
+  var userMessages = {};
+  var wordList = [];
+  var word = {};
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
 
-    if (element.childNodes.length == 0) return; 
+    if (element.childNodes.length == 0) return;
     var timestamp = time[idx].childNodes[0].rawText;
     var userName = he.decode(user[idx].childNodes[0].rawText);
     var messageTxt = he.decode(element.childNodes[0].rawText);
+    var eachWord = element.childNodes[0].rawText.split(' ');
+    // var messageRaw = element.childNodes[0].rawText;
 
     if (userName == 'Jack Hanford') {
       return;
+      // eachWord.map(function(item) {
+      //   word[item] ? word[item] ++ : word[item] = 1;
+      // })
     }
 
-    var message = element.childNodes[0].rawText;
-
-    // Monday, September 10, 2012 at 10:51pm PDT - Timestamp pre moment
+    // Timestamp pre moment - Monday, September 10, 2012 at 10:51pm PDT
     var parts = timestamp.split(', ');
 
     timestamp = parts.reduce(function(prev, part, idx) {
@@ -42,14 +49,14 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
       }
     }, '');
 
-    var stamp = moment(timestamp, ['MMM DD, YYYY at HH:mmA']);
+    var stamp = moment(timestamp, ['MMM D YYYY at h:mA']);
     var stampYear = stamp.year();
     var stampMonth = stamp.month();
-    var stampDay = stamp.day();
+    var stampDay = stamp.date();
 
-    // if (!(stampYear > startYear && stampYear < endYear)) {
-    //   return;
-    // }
+    var sentimentScore = sentiment(messageTxt).score;
+    var eachword = messageTxt.split(' ');
+    var yearTotal = 1;
 
     if (!calendar[stampYear]) {
       calendar[stampYear] = {};
@@ -67,26 +74,46 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
       calendar[stampYear][stampMonth][stampDay][userName] = [];
     }
 
-    if (!messageCount[userName]) {
-      messageCount[userName] = [];
+    if (!userMessages[userName]) {
+      userMessages[userName] = {
+        messages: []
+      };
     }
 
-    messageCount[userName].push(timestamp);
-    
-    // Cutting string to remove extra space
-    calendar[stampYear][stampMonth][stampDay][userName].push(timestamp.substring(1));
+    var computedMessage = {
+      content: messageTxt,
+      timestamp: timestamp.trim(),
+      score: sentimentScore
+    };
 
-    stream.write(userName + ',' + timestamp + '\n');
+    userMessages[userName].messages.push(computedMessage);
+    calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
+    // calendar[stampYear][stampMonth][stampDay][userName].push(messageList);
+
+    stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
   });
 
-stream.end();
+  stream.end();
 
+  for (var user in userMessages) {
+    var messages = userMessages[user].messages;
+    var len = messages.length;
 
-var data = JSON.stringify(calendar)
-fs.writeFile('data.json', data, function (err) {
-  if (err) throw err;
-  console.log('It\'s saved!');
+    var sum = messages.reduce(function(prev, msg) {
+      if (msg.content.split(' ').length <= 1) {
+        len--;
+        return prev || 0;
+      }
+
+      return (prev || 0) + msg.score;
+    }, 0);
+
+    userMessages[user].average = sum / len;
+  }
+
+  var data = JSON.stringify({ 'userMessages': userMessages, 'dictionary': wordList, 'calendar': calendar })
+  fs.writeFile('data.json', data, function (err) {
+    if (err) throw err;
+    console.log('It\'s saved!');
+  });
 });
-
-
-})

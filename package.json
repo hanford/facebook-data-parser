@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "fast-html-parser": "^1.0.0",
+    "fb": "^0.7.0",
     "he": "^0.5.0",
     "moment": "^2.8.3",
     "sentiment": "^1.0.2"

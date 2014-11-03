@@ -1,9 +1,8 @@
 data/*
 .DS_*
 node_modules/*
-facebook/*
 facebo*
 bower_components/*
-data.json
+data*
 output*
 app1*
