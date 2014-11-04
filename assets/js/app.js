@@ -2,6 +2,7 @@ var app = angular.module('fbDataApp', ['tc.chartjs']);
 
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
   $http.get('../../data.json').success(function(response) {
+    console.log(response)
 
     $scope.messages = response.userMessages;
 
@@ -9,6 +10,14 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var bestFriends = [];
     var messageWeekdays = [];
     var messageWeekdayCount = [];
+    var wordCount = [];
+
+    for (var word in response.dictionary) {
+      // Grab words used more then 500 times
+      if (response.dictionary[word] > 500) {
+        wordCount.push(word + ' ' + response.dictionary[word])
+      }
+    }
 
     for (var prop in response.dayCount) {
       messageWeekdays.push(prop)
@@ -38,7 +47,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.sadFriends = messageMoods.slice(0, 20);
     $scope.happyFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
-    debugger
 
     $scope.bestFriends = bestFriends.slice(bestFriends.length - 20, bestFriends.length).reverse();
 

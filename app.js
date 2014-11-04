@@ -15,10 +15,19 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var message = root.querySelectorAll('p');
   var time = root.querySelectorAll('.meta');
 
+  // Grabbing users full
+  var name = root.querySelectorAll('h1');
+  name.map(function(element) {
+    fullname = element.childNodes[0].rawText;
+  })
+
 
   // CSV for potential d3 graph
   // var stream = fs.createWriteStream('data.csv');
   // stream.write('key, value, date' + '\n');
+  // stream.end();
+  // stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
+
   var calendar = {};
   var userMessages = {};
   var dict = {};
@@ -34,7 +43,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var messageTxt = he.decode(element.childNodes[0].rawText);
     var eachWord = element.childNodes[0].rawText.split(' ');
 
-    if (userName == 'Jack Hanford') {
+    if (userName == fullname) {
       eachWord.map(function(word) {
         word = he.decode(word.toLowerCase().replace(/↵/g, ' ').trim());
 
@@ -61,7 +70,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var stampMonth = stamp.month();
     var stampDay = stamp.date();
 
-    // Sentiment on facebook message, returns context mood of message
+    // Sentiment on facebook message, returns contextual mood of message
     var sentimentScore = sentiment(messageTxt).score;
 
     if (!calendar[stampYear]) {
@@ -94,11 +103,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     userMessages[userName].messages.push(computedMessage);
     calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
-
-    // stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
   });
-
-  // stream.end();
 
   for (var user in userMessages) {
     var messages = userMessages[user].messages;
@@ -117,6 +122,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     userMessages[user].average = sum / len;
   }
 
+  // Object for the front end
   var data = JSON.stringify({
     userMessages: userMessages,
     calendar: calendar,
