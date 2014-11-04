@@ -5,6 +5,7 @@ var he = require('he');
 var sentiment = require('sentiment');
 var HTMLParser = require('fast-html-parser');
 
+// Will use for names returned as id@facebook.com
 // FB.setAccessToken('token')
 
 fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
@@ -15,17 +16,20 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var time = root.querySelectorAll('.meta');
 
 
+  // CSV for potential d3 graph
   // var stream = fs.createWriteStream('data.csv');
   // stream.write('key, value, date' + '\n');
   var calendar = {};
   var userMessages = {};
   var dict = {};
+  var dayCount = {};
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
 
     if (element.childNodes.length == 0) return;
     var timestamp = time[idx].childNodes[0].rawText;
+
     var userName = he.decode(user[idx].childNodes[0].rawText);
     var messageTxt = he.decode(element.childNodes[0].rawText);
     var eachWord = element.childNodes[0].rawText.split(' ');
@@ -33,6 +37,8 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     if (userName == 'Jack Hanford') {
       eachWord.map(function(word) {
         word = he.decode(word.toLowerCase().replace(/↵/g, ' ').trim());
+
+        // Counter for word use
         dict[word] ? dict[word] ++ : dict[word] = 1;
       });
       return;
@@ -40,6 +46,9 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     // Timestamp pre moment - Monday, September 10, 2012 at 10:51pm PDT
     var parts = timestamp.split(', ');
+    var day = parts[0];
+
+    dayCount[day] ? dayCount[day] ++ : dayCount[day] = 1;
 
     timestamp = parts.reduce(function(prev, part, idx) {
       if (idx > 0) {
@@ -52,6 +61,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var stampMonth = stamp.month();
     var stampDay = stamp.date();
 
+    // Sentiment on facebook message, returns context mood of message
     var sentimentScore = sentiment(messageTxt).score;
 
     if (!calendar[stampYear]) {
@@ -76,11 +86,11 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
       };
     }
 
-    // var computedMessage = {
-    //   content: messageTxt,
-    //   timestamp: timestamp.trim(),
-    //   score: sentimentScore
-    // };
+    var computedMessage = {
+      content: messageTxt,
+      timestamp: timestamp.trim(),
+      score: sentimentScore
+    };
 
     userMessages[userName].messages.push(computedMessage);
     calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
@@ -95,6 +105,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var len = messages.length;
 
     var sum = messages.reduce(function(prev, msg) {
+      // Correct length for messages
       if (msg.content.split(' ').length <= 1) {
         len--;
         return prev || 0;
@@ -106,11 +117,12 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     userMessages[user].average = sum / len;
   }
 
-  // var data = JSON.stringify({
-  //   userMessages: userMessages,
-  //   calendar: calendar,
-  //   dictionary: dict
-  // })
+  var data = JSON.stringify({
+    userMessages: userMessages,
+    calendar: calendar,
+    dictionary: dict,
+    dayCount: dayCount,
+  })
 
   fs.writeFile('data.json', data, function(err) {
     if (err) throw err;

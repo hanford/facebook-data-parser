@@ -5,9 +5,11 @@
   <title>Facebook Visualization</title>
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/cal-heatmap/cal-heatmap.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
-
   <script type="text/javascript" src="bower_components/Chart.js/Chart.min.js"></script>
+  <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+  <script type="text/javascript" src="bower_components/cal-heatmap/cal-heatmap.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
 </head>
@@ -16,19 +18,19 @@
   <div ng-app="fbDataApp" ng-controller="fbDataCtrl" class="container">
     <div class="row center">
       <h3>facebook data parser</h3>
-      <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend></canvas>
+      <div class="graph-cont">
+        <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend></canvas>
+      </div>
     </div>
-    <div class="row">
-      <!-- <div class="col-md-12 center">Score is calculated by the average sentiment score of each message recieved.</div> -->
-    </div>
+    <br />
     <div class="row">
       <div class="col-md-4">
         <ul class="list-group">
           <a href="javascript:void(0);" class="list-group-item disabled">
             Saddest Friends
           </a>
-          <li class="list-group-item" ng-repeat="saddestFriend in saddestFriends">
-            <span class="badge">{{saddestFriend[1]}}</span> {{saddestFriend[0]}}
+          <li class="list-group-item" ng-repeat="sadFriend in sadFriends">
+            <span class="badge">{{sadFriend[1]}}</span> {{sadFriend[0]}}
           </li>
         </ul>
       </div>
@@ -37,8 +39,8 @@
           <a href="javascript:void(0);" class="list-group-item disabled">
             Happiest Friends
           </a>
-          <li class="list-group-item" ng-repeat="happiestFriend in happiestFriends">
-            <span class="badge">{{happiestFriend[1]}}</span> {{happiestFriend[0]}}
+          <li class="list-group-item" ng-repeat="happyFriend in happyFriends">
+            <span class="badge">{{happyFriend[1]}}</span> {{happyFriend[0]}}
           </li>
         </ul>
       </div>
@@ -65,7 +67,6 @@
       </div>
       </ul>
     </div> -->
-  </div>
   </div>
   <script type="text/javascript" src="assets/js/app.js"></script>
 </body>

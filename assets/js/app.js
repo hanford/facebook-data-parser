@@ -3,13 +3,20 @@ var app = angular.module('fbDataApp', ['tc.chartjs']);
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
   $http.get('../../data.json').success(function(response) {
 
-    $scope.items = response.userMessages;
+    $scope.messages = response.userMessages;
 
     var messageMoods = [];
     var bestFriends = [];
+    var messageWeekdays = [];
+    var messageWeekdayCount = [];
 
-    for (var userName in $scope.items) {
-      var user = $scope.items[userName];
+    for (var prop in response.dayCount) {
+      messageWeekdays.push(prop)
+      messageWeekdayCount.push(response.dayCount[prop])
+    }
+
+    for (var userName in $scope.messages) {
+      var user = $scope.messages[userName];
 
       if (user.hasOwnProperty('average')) {
         user.average = Math.round(user.average * 100) / 100;
@@ -29,22 +36,23 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       return a[1] - b[1]
     });
 
+    $scope.sadFriends = messageMoods.slice(0, 20);
+    $scope.happyFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
+    debugger
 
-    $scope.happiestFriends = messageMoods.slice(0, 20);
     $scope.bestFriends = bestFriends.slice(bestFriends.length - 20, bestFriends.length).reverse();
-    $scope.saddestFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
 
     $scope.data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: messageWeekdays,
       datasets: [{
-        label: '',
+        label: 'Conversations started by day',
         fillColor: 'rgba(151,187,205,0.2)',
         strokeColor: 'rgba(151,187,205,1)',
         pointColor: 'rgba(151,187,205,1)',
         pointStrokeColor: '#fff',
         pointHighlightFill: '#fff',
         pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [28, 48, 40, 19, 86, 27, 90]
+        data: messageWeekdayCount
       }]
     };
 
