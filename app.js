@@ -15,9 +15,8 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var time = root.querySelectorAll('.meta');
 
 
-  var stream = fs.createWriteStream('data.csv');
-  stream.write('key, value, date' + '\n');
-
+  // var stream = fs.createWriteStream('data.csv');
+  // stream.write('key, value, date' + '\n');
   var calendar = {};
   var userMessages = {};
   var dict = {};
@@ -86,10 +85,10 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     userMessages[userName].messages.push(computedMessage);
     calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
 
-    stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
+    // stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
   });
 
-  stream.end();
+  // stream.end();
 
   for (var user in userMessages) {
     var messages = userMessages[user].messages;
