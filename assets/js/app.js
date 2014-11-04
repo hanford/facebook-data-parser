@@ -15,10 +15,11 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     for (var word in response.dictionary) {
       // Grab words used more then 500 times
       if (response.dictionary[word] > 500) {
-        wordCount.push(word + ' ' + response.dictionary[word])
+        // wordCount.push(word + ' ' + response.dictionary[word])
       }
     }
 
+    // Checking property of object
     for (var prop in response.dayCount) {
       messageWeekdays.push(prop)
       messageWeekdayCount.push(response.dayCount[prop])
@@ -50,6 +51,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.bestFriends = bestFriends.slice(bestFriends.length - 20, bestFriends.length).reverse();
 
+    // ChartJS set up
     $scope.data = {
       labels: messageWeekdays,
       datasets: [{
@@ -65,6 +67,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     };
 
 
+    // ChartJS options
     $scope.options = {
       // Sets the chart to be responsive
       responsive: true,

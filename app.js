@@ -1,12 +1,12 @@
 var fs = require('fs');
-var FB = require('fb');
 var moment = require('moment');
 var he = require('he');
 var sentiment = require('sentiment');
 var HTMLParser = require('fast-html-parser');
 
 // Will use for names returned as id@facebook.com
-// FB.setAccessToken('token')
+// var FB = require('fb');
+// FB.setAccessToken('token');
 
 fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   if (err) throw err;

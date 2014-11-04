@@ -1,1 +1,1 @@
-parse data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>, bower i, npm install, drag facebook zip into this root this file extract, rename facebook, node app. Will shorten that process in the future ;)
+parse data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>, bower i, npm install, drag facebook zip into this root this file extract, rename it to facebook, run node app. Will shorten that process in the future ;)
