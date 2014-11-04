@@ -23,10 +23,3 @@ input {
 li {
   list-style: none;
 }
-
-.chart-cont {
-  height: 700px;
-  width: 1000px;
-  margin: 0 auto;
-  display: block;
-}

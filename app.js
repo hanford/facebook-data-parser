@@ -20,8 +20,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
   var calendar = {};
   var userMessages = {};
-  var wordList = [];
-  var word = {};
+  var dict = {};
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
@@ -31,13 +30,13 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var userName = he.decode(user[idx].childNodes[0].rawText);
     var messageTxt = he.decode(element.childNodes[0].rawText);
     var eachWord = element.childNodes[0].rawText.split(' ');
-    // var messageRaw = element.childNodes[0].rawText;
 
     if (userName == 'Jack Hanford') {
+      eachWord.map(function(word) {
+        word = he.decode(word.toLowerCase().replace(/↵/g, ' ').trim());
+        dict[word] ? dict[word] ++ : dict[word] = 1;
+      });
       return;
-      // eachWord.map(function(item) {
-      //   word[item] ? word[item] ++ : word[item] = 1;
-      // })
     }
 
     // Timestamp pre moment - Monday, September 10, 2012 at 10:51pm PDT
@@ -45,7 +44,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     timestamp = parts.reduce(function(prev, part, idx) {
       if (idx > 0) {
-        return (prev || '') + ' ' + part; 
+        return (prev || '') + ' ' + part;
       }
     }, '');
 
@@ -55,8 +54,6 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var stampDay = stamp.date();
 
     var sentimentScore = sentiment(messageTxt).score;
-    var eachword = messageTxt.split(' ');
-    var yearTotal = 1;
 
     if (!calendar[stampYear]) {
       calendar[stampYear] = {};
@@ -80,15 +77,14 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
       };
     }
 
-    var computedMessage = {
-      content: messageTxt,
-      timestamp: timestamp.trim(),
-      score: sentimentScore
-    };
+    // var computedMessage = {
+    //   content: messageTxt,
+    //   timestamp: timestamp.trim(),
+    //   score: sentimentScore
+    // };
 
     userMessages[userName].messages.push(computedMessage);
     calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
-    // calendar[stampYear][stampMonth][stampDay][userName].push(messageList);
 
     stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
   });
@@ -111,8 +107,13 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     userMessages[user].average = sum / len;
   }
 
-  var data = JSON.stringify({ 'userMessages': userMessages, 'dictionary': wordList, 'calendar': calendar })
-  fs.writeFile('data.json', data, function (err) {
+  // var data = JSON.stringify({
+  //   userMessages: userMessages,
+  //   calendar: calendar,
+  //   dictionary: dict
+  // })
+
+  fs.writeFile('data.json', data, function(err) {
     if (err) throw err;
     console.log('It\'s saved!');
   });
