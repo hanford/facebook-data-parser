@@ -11,6 +11,8 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var messageWeekdays = [];
     var messageWeekdayCount = [];
     var messageMonthlyCount = [];
+    var messageYear = [];
+    var messageYearly = [];
     var wordCount = [];
 
     for (var word in response.dictionary) {
@@ -87,9 +89,46 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       }]
     };
 
+    $scope.yearly = [];
+
+    for (var prop in response.yearCount) {
+      var color = Please.make_color( );
+      var year = {
+        value: response.yearCount[prop],
+        color: color,
+        highlight: color,
+        label: prop,
+      };
+      $scope.yearly.push(year)
+    }
+
+        // Chart.js Options
+    $scope.pie =  {
+      // Sets the chart to be responsive
+      responsive: true,
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke : true,
+      //String - The colour of each segment stroke
+      segmentStrokeColor : '#fff',
+      //Number - The width of each segment stroke
+      segmentStrokeWidth : 2,
+      //Number - The percentage of the chart that we cut out of the middle
+      percentageInnerCutout : 20, // This is 0 for Pie charts
+      //Number - Amount of animation steps
+      animationSteps : 100,
+      //String - Animation easing effect
+      animationEasing : 'easeOutBounce',
+      //Boolean - Whether we animate the rotation of the Doughnut
+      animateRotate : true,
+      //Boolean - Whether we animate scaling the Doughnut from the centre
+      animateScale : true,
+      //String - A legend template
+      legendTemplate : '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+
+    };
 
     // ChartJS options
-    $scope.options = {
+    $scope.lineChart = {
       // Sets the chart to be responsive
       responsive: true,
       ///Boolean - Whether grid lines are shown across the chart
@@ -123,6 +162,8 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       //String - A legend template
       legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
+
+
   }).error(function(err) {
     console.log(err)
   })

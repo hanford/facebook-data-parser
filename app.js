@@ -33,6 +33,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var dict = {};
   var dayCount = {};
   var monthCount = {};
+  var yearCount = {};
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
@@ -68,6 +69,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     var stamp = moment(timestamp, ['MMM D YYYY at h:mA']);
     var stampYear = stamp.year();
+    yearCount[stampYear] ? yearCount[stampYear] ++ : yearCount[stampYear] = 1;
     var stampMonth = stamp.month();
     monthCount[stampMonth] ? monthCount[stampMonth] ++ : monthCount[stampMonth] = 1;
     var stampDay = stamp.date();
@@ -131,6 +133,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     dictionary: dict,
     dayCount: dayCount,
     monthCount: monthCount,
+    yearCount: yearCount,
   })
 
   fs.writeFile('data.json', data, function(err) {

@@ -9,21 +9,36 @@
   <script type="text/javascript" src="bower_components/Chart.js/Chart.min.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="bower_components/pleasejs/dist/Please.js"></script>
   <script type="text/javascript" src="bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
 </head>
 
 <body>
   <div ng-app="fbDataApp" ng-controller="fbDataCtrl" class="container">
     <div class="row center">
-      <h3>facebook data parser</h3>
+      <h2>facebook data parser</h2>
+      <br />
+    </div>
+    <div class="row center">
+      <h3>Yearly Activity</h3>
+      <div class="col-md-12">
+        <div class="pie-cont">
+          <canvas tc-chartjs-pie chart-options="pie" chart-data="yearly"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row center">
+      <h3>Monthly / Weekday Activity</h3>
       <div class="col-md-6">
-        <canvas tc-chartjs-line chart-options="options" chart-data="weeklyData" auto-legend></canvas>
+        <canvas tc-chartjs-line chart-options="lineChart" chart-data="weeklyData" auto-legend></canvas>
       </div>
       <div class="col-md-6">
-        <canvas tc-chartjs-line chart-options="options" chart-data="monthlyData" auto-legend></canvas>
+        <canvas tc-chartjs-line chart-options="lineChart" chart-data="monthlyData" auto-legend></canvas>
       </div>
     </div>
     <br />
+    <br />
+    <h3 class="center">Sentiment Analysis</h3>
     <div class="row">
       <div class="col-md-4">
         <ul class="list-group">

@@ -24,4 +24,12 @@ li {
 		/*width: 500px;*/
 		display: inline-block;
 		margin: 0 auto;
+		padding-bottom:60px;
+}
+
+.pie-cont {
+	width: 600px;
+	display: block;
+	margin: 0 auto;
+	padding-bottom:60px;
 }
