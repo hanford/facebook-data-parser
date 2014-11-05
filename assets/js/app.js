@@ -10,11 +10,13 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var bestFriends = [];
     var messageWeekdays = [];
     var messageWeekdayCount = [];
+    var messageMonthlyCount = [];
     var wordCount = [];
 
     for (var word in response.dictionary) {
       // Grab words used more then 500 times
       if (response.dictionary[word] > 500) {
+
         // wordCount.push(word + ' ' + response.dictionary[word])
       }
     }
@@ -23,6 +25,11 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     for (var prop in response.dayCount) {
       messageWeekdays.push(prop)
       messageWeekdayCount.push(response.dayCount[prop])
+    }
+
+    // Checking property of object
+    for (var prop in response.monthCount) {
+      messageMonthlyCount.push(response.monthCount[prop])
     }
 
     for (var userName in $scope.messages) {
@@ -52,7 +59,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     $scope.bestFriends = bestFriends.slice(bestFriends.length - 20, bestFriends.length).reverse();
 
     // ChartJS set up
-    $scope.data = {
+    $scope.weeklyData = {
       labels: messageWeekdays,
       datasets: [{
         label: 'Conversations started by day',
@@ -63,6 +70,20 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         pointHighlightFill: '#fff',
         pointHighlightStroke: 'rgba(151,187,205,1)',
         data: messageWeekdayCount
+      }]
+    };
+
+    $scope.monthlyData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        label: 'Conversations started by Month',
+        fillColor: 'rgba(220,220,220,0.2)',
+        strokeColor: 'rgba(220,220,220,1)',
+        pointColor: 'rgba(220,220,220,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(220,220,220,1)',
+        data: messageMonthlyCount
       }]
     };
 

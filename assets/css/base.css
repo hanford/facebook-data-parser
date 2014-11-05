@@ -21,7 +21,7 @@ li {
 		list-style: none;
 }
 .graph-cont {
-		width: 500px;
-		display: block;
+		/*width: 500px;*/
+		display: inline-block;
 		margin: 0 auto;
 }

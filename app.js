@@ -32,6 +32,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   var userMessages = {};
   var dict = {};
   var dayCount = {};
+  var monthCount = {};
 
   message.map(function(element, idx) {
     console.log(idx + ' messages');
@@ -68,6 +69,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var stamp = moment(timestamp, ['MMM D YYYY at h:mA']);
     var stampYear = stamp.year();
     var stampMonth = stamp.month();
+    monthCount[stampMonth] ? monthCount[stampMonth] ++ : monthCount[stampMonth] = 1;
     var stampDay = stamp.date();
 
     // Sentiment on facebook message, returns contextual mood of message
@@ -128,6 +130,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     calendar: calendar,
     dictionary: dict,
     dayCount: dayCount,
+    monthCount: monthCount,
   })
 
   fs.writeFile('data.json', data, function(err) {

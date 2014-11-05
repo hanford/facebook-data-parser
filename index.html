@@ -16,8 +16,11 @@
   <div ng-app="fbDataApp" ng-controller="fbDataCtrl" class="container">
     <div class="row center">
       <h3>facebook data parser</h3>
-      <div class="graph-cont">
-        <canvas tc-chartjs-line chart-options="options" chart-data="data" auto-legend></canvas>
+      <div class="col-md-6">
+        <canvas tc-chartjs-line chart-options="options" chart-data="weeklyData" auto-legend></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas tc-chartjs-line chart-options="options" chart-data="monthlyData" auto-legend></canvas>
       </div>
     </div>
     <br />
