@@ -122,7 +122,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       return a[1] - b[1]
     });
 
-    var sentimentData = [];
     var len = topFriends.length;
 
     var negative = {
@@ -144,7 +143,8 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       })
     }
 
-    var positive20 = topFriends.slice(len - 20, len).reverse();
+    topFriends.reverse();
+    var positive20 = topFriends.slice(0, 20);
     for (var user in positive20) {
       positive["values"].push({
         label: topFriends[user][0],
@@ -152,8 +152,10 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       })
     }
 
-    sentimentData.push(negative)
-    sentimentData.push(positive)
+    var negativeChart = [];
+    var positiveChart = [];
+    negativeChart.push(negative)
+    positiveChart.push(positive)
 
     nv.addGraph(function() {
       var chart = nv.models.multiBarHorizontalChart()
@@ -169,16 +171,46 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
           bottom: 50,
           left: 175
         })
-        .showValues(true) //Show bar value next to each bar.
+        .showValues(false) //Show bar value next to each bar.
         .tooltips(true) //Show tooltips on hover.
         .transitionDuration(350)
-        .showControls(true); //Allow user to switch between "Grouped" and "Stacked" mode.
+        .showControls(false); //Allow user to switch between "Grouped" and "Stacked" mode.
 
       chart.yAxis
         .tickFormat(d3.format(',.2f'));
 
-      d3.select('#mood svg')
-        .datum(sentimentData)
+      d3.select('#negative svg')
+        .datum(negativeChart)
+        .call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+    });
+    nv.addGraph(function() {
+      var chart = nv.models.multiBarHorizontalChart()
+        .x(function(d) {
+          return d.label
+        })
+        .y(function(d) {
+          return d.value
+        })
+        .margin({
+          top: 30,
+          right: 20,
+          bottom: 50,
+          left: 175
+        })
+        .showValues(false) //Show bar value next to each bar.
+        .tooltips(true) //Show tooltips on hover.
+        .transitionDuration(350)
+        .showControls(false); //Allow user to switch between "Grouped" and "Stacked" mode.
+
+      chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+      d3.select('#positive svg')
+        .datum(positiveChart)
         .call(chart);
 
       nv.utils.windowResize(chart.update);
