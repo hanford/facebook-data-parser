@@ -8,9 +8,10 @@
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
 
-  <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-  <script type="text/javascript" src="bower_components/nvd3/nv.d3.min.js"></script>
+  <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+  <script type="text/javascript" src="bower_components/nvd3/nv.d3.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="node_modules/moment/moment.js"></script>
 </head>
 
 <body>
@@ -19,6 +20,8 @@
       <h2>facebook data parser</h2>
       <br />
     </div>
+    <br />
+    <br />
     <div class="row center">
       <h3>Yearly Activity</h3>
       <div class="col-md-12">
@@ -27,8 +30,10 @@
         </div>
       </div>
     </div>
+    <br />
+    <br />
     <div class="row center">
-      <h3>Monthly / Weekday Activity</h3>
+      <h3>Total Monthly and Weekday Activity</h3>
       <div class="col-md-6">
         <div id="weeklyPie" class="pie">
           <svg></svg>
@@ -38,56 +43,26 @@
         <div id="monthlyPie" class="pie">
           <svg></svg>
         </div>
-        <!-- <canvas tc-chartjs-line chart-options="lineChart" chart-data="monthlyData" auto-legend></canvas> -->
       </div>
     </div>
     <br />
     <br />
-    <h3 class="center">Sentiment Analysis</h3>
+    <div class="row center">
+      <h3>Estimated sentiment analysis</h3>
+      <div class="col-md-12">
+        <div id="mood">
+          <svg></svg>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
     <div class="row">
-      <div class="col-md-4">
-        <ul class="list-group">
-          <a href="javascript:void(0);" class="list-group-item disabled">
-            Saddest Friends
-          </a>
-          <li class="list-group-item" ng-repeat="sadFriend in sadFriends">
-            <span class="badge">{{sadFriend[1]}}</span> {{sadFriend[0]}}
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <ul class="list-group">
-          <a href="javascript:void(0);" class="list-group-item disabled">
-            Happiest Friends
-          </a>
-          <li class="list-group-item" ng-repeat="happyFriend in happyFriends">
-            <span class="badge">{{happyFriend[1]}}</span> {{happyFriend[0]}}
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <ul class="list-group">
-          <a href="javascript:void(0);" class="list-group-item disabled">
-            Best Friends
-          </a>
-          <li class="list-group-item" ng-repeat="bestFriend in bestFriends">
-            <span class="badge">{{bestFriend[2]}}</span> {{bestFriend[0]}}
-          </li>
-        </ul>
+      <div class="col-md-12">
+        <div id="besties">
+          <svg></svg>
       </div>
     </div>
-    <!-- <div class="row">
-      <div class="col-md-4">
-        <ul class="list-group">
-          <a href="javascript:void(0);" class="list-group-item disabled">
-            Most used Words
-          </a>
-          <li class="list-group-item" ng-repeat="word in words">
-            <span class="badge">{{word}}</span> {{word}}
-          </li>
-      </div>
-      </ul>
-    </div> -->
   </div>
   <script type="text/javascript" src="assets/js/app.js"></script>
 </body>

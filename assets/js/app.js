@@ -8,36 +8,35 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     var messageMoods = [];
     var bestFriends = [];
-    var messageWeekdays = [];
-    var messageWeekdayCount = [];
-    var messageMonthlyCount = [];
-    var messageYear = [];
-    var messageYearly = [];
     var wordCount = [];
 
     for (var word in response.dictionary) {
-      // Grab words used more then 500 times
-      if (response.dictionary[word] > 500) {
+      // Grabs words used more then 500 times, throws out spaces ""
+      if (response.dictionary[word] > 500 && word.length > 0) {
 
         // wordCount.push(word + ' ' + response.dictionary[word])
       }
     }
 
     // Checking property of object
+    var messageWeekdays = [];
     for (var prop in response.dayCount) {
-      messageWeekdays.push({label: prop, value: response.dayCount[prop]})
+      messageWeekdays.push({
+        label: prop,
+        value: response.dayCount[prop]
+      })
     }
-
-    console.log(messageWeekdays)
 
     // Checking property of object
     var monthLabel = 0;
+    var messageMonthlyCount = [];
     for (var prop in response.monthCount) {
       var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      messageMonthlyCount.push({label: month[monthLabel++], value: response.monthCount[prop]})
+      messageMonthlyCount.push({
+        label: month[monthLabel++],
+        value: response.monthCount[prop]
+      })
     }
-
-    console.log(messageMonthlyCount)
 
     for (var userName in $scope.messages) {
       var user = $scope.messages[userName];
@@ -53,16 +52,67 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       if (user.hasOwnProperty('average')) {
         var messageTotal = user.messages.length;
         user.average = Math.round(user.average * 100) / 100;
-        messageMoods.push([userName, user.average, messageTotal]);
+        timestampCount = {};
+        user.messages[userName]
+        for (var count in user.messages) {
+          var timestamp = user.messages[count].timestamp;
+          // Converting to UTC ...
+          var stamp = moment(timestamp, ['MMM D YYYY at h:mA']).valueOf();
+          timestampCount[stamp] ? timestampCount[stamp] ++ : timestampCount[stamp] = 1;
+        }
+        messageMoods.push([userName, user.average, messageTotal, timestampCount]);
       }
     }
 
-    // Sorting Most active users based on total messages with user
+    // Sorting Most active users based on messages
     messageMoods.sort(function(a, b) {
       return a[2] - b[2]
     });
 
-    $scope.bestFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
+    var top20Contacts = messageMoods.slice(messageMoods.length - 10, messageMoods.length).reverse();
+
+    var bestFriends = [];
+    for (var friend in top20Contacts) {
+      bestFriends.push({
+        'key': top20Contacts[friend][0],
+        'values': []
+      })
+      for (var times in top20Contacts[friend][3]) {
+        if (times === 1) { console.log('t1'); }
+        bestFriends[friend]['values'].push([parseInt(times), top20Contacts[friend][3][times]]);
+      }
+    }
+
+    // console.log(JSON.stringify(bestFriends, null, 4));
+
+  // nv.addGraph(function() {
+  //   var chart = nv.models.stackedAreaChart()
+  //                 .margin({right: 100})
+  //                 .x(function(d) { return d[0] })   //We can modify the data accessor functions...
+  //                 .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
+  //                 .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
+  //                 .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
+  //                 .transitionDuration(500)
+  //                 .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+  //                 .clipEdge(true);
+  //
+  //   //Format x-axis labels with custom function.
+  //   chart.xAxis
+  //       .tickFormat(function(d) {
+  //         return d3.time.format('%x')(new Date(d))
+  //   });
+  //
+  //   chart.yAxis
+  //       .tickFormat(d3.format(',.2f'));
+  //
+  //   d3.select('#besties svg')
+  //     .datum(bestFriends)
+  //     .call(chart);
+  //
+  //   nv.utils.windowResize(chart.update);
+  //
+  //   return chart;
+  // });
 
     // if you have more then 200 friends, were only going to take the top 200.
     messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length) : topFriends = messageMoods
@@ -71,11 +121,70 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     topFriends.sort(function(a, b) {
       return a[1] - b[1]
     });
-    // Slicing lowest sentiment
-    $scope.sadFriends = topFriends.slice(0, 20);
-    topFriends.reverse();
-    // Slicing top sentiment scores
-    $scope.happyFriends = topFriends.slice(0, 20);
+
+    var sentimentData = [];
+    var len = topFriends.length;
+
+    var negative = {
+      "key": "Negative",
+      "color": "#d67777",
+      "values": []
+    };
+    var positive = {
+      "key": "Positive",
+      "color": "#4f99b4",
+      "values": []
+    };
+
+    var negative20 = topFriends.slice(0, 20);
+    for (var user in negative20) {
+      negative["values"].push({
+        label: topFriends[user][0],
+        value: negative20[user][1]
+      })
+    }
+
+    var positive20 = topFriends.slice(len - 20, len).reverse();
+    for (var user in positive20) {
+      positive["values"].push({
+        label: topFriends[user][0],
+        value: positive20[user][1]
+      })
+    }
+
+    sentimentData.push(negative)
+    sentimentData.push(positive)
+
+    nv.addGraph(function() {
+      var chart = nv.models.multiBarHorizontalChart()
+        .x(function(d) {
+          return d.label
+        })
+        .y(function(d) {
+          return d.value
+        })
+        .margin({
+          top: 30,
+          right: 20,
+          bottom: 50,
+          left: 175
+        })
+        .showValues(true) //Show bar value next to each bar.
+        .tooltips(true) //Show tooltips on hover.
+        .transitionDuration(350)
+        .showControls(true); //Allow user to switch between "Grouped" and "Stacked" mode.
+
+      chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+      d3.select('#mood svg')
+        .datum(sentimentData)
+        .call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+    });
 
     //Regular pie chart example
     nv.addGraph(function() {
@@ -116,7 +225,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.yearly = [];
     var vals = [];
-
     for (var prop in response.yearCount) {
       var pos = {
         x: prop,
@@ -127,7 +235,8 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.yearly.push({
       values: vals,
-      key: 'messages'
+      key: 'messages',
+      area: true
     });
 
     nv.addGraph(function() {
@@ -137,7 +246,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         }) //Adjust chart margins to give the x-axis some breathing room.
         .useInteractiveGuideline(true) //We want nice looking tooltips and a guideline!
         .transitionDuration(350) //how fast do you want the lines to transition?
-        .showLegend(true) //Show the legend, allowing users to turn on/off line series.
+        .showLegend(false) //Show the legend, allowing users to turn on/off line series.
         .showYAxis(true) //Show the y-axis
         .showXAxis(true) //Show the x-axis
       ;
@@ -147,7 +256,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         .tickFormat(d3.format('d'));
 
       chart.yAxis //Chart y-axis settings
-        .axisLabel('# of Messages')
+        .axisLabel('Number of Messages')
         .tickFormat(d3.format('d'));
 
       var myData = $scope.yearly;
@@ -162,43 +271,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       });
       return chart;
     });
-
-    // ChartJS options
-    $scope.lineChart = {
-      // Sets the chart to be responsive
-      responsive: true,
-      ///Boolean - Whether grid lines are shown across the chart
-      scaleShowGridLines: true,
-      //String - Colour of the grid lines
-      scaleGridLineColor: "rgba(0,0,0,.05)",
-      //Number - Width of the grid lines
-      scaleGridLineWidth: 1,
-      //Boolean - Whether the line is curved between points
-      bezierCurve: true,
-      //Number - Tension of the bezier curve between points
-      bezierCurveTension: 0.4,
-      //Boolean - Whether to show a dot for each point
-      pointDot: true,
-      //Number - Radius of each point dot in pixels
-      pointDotRadius: 4,
-      //Number - Pixel width of point dot stroke
-      pointDotStrokeWidth: 1,
-      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-      pointHitDetectionRadius: 20,
-      //Boolean - Whether to show a stroke for datasets
-      datasetStroke: true,
-      //Number - Pixel width of dataset stroke
-      datasetStrokeWidth: 2,
-      //Boolean - Whether to fill the dataset with a colour
-      datasetFill: true,
-      // Function - on animation progress
-      onAnimationProgress: function() {},
-      // Function - on animation complete
-      onAnimationComplete: function() {},
-      //String - A legend template
-      legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
-    };
-
 
   }).error(function(err) {
     console.log(err)
