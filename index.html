@@ -5,12 +5,12 @@
   <title>Facebook Visualization</title>
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
-  <script type="text/javascript" src="bower_components/Chart.js/Chart.min.js"></script>
+
   <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+  <script type="text/javascript" src="bower_components/nvd3/nv.d3.min.js"></script>
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-  <script type="text/javascript" src="bower_components/pleasejs/dist/Please.js"></script>
-  <script type="text/javascript" src="bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
 </head>
 
 <body>
@@ -22,18 +22,23 @@
     <div class="row center">
       <h3>Yearly Activity</h3>
       <div class="col-md-12">
-        <div class="pie-cont">
-          <canvas tc-chartjs-pie chart-options="pie" chart-data="yearly"></canvas>
+        <div id="messageActivty">
+          <svg></svg>
         </div>
       </div>
     </div>
     <div class="row center">
       <h3>Monthly / Weekday Activity</h3>
       <div class="col-md-6">
-        <canvas tc-chartjs-line chart-options="lineChart" chart-data="weeklyData" auto-legend></canvas>
+        <div id="weeklyPie" class="pie">
+          <svg></svg>
+        </div>
       </div>
       <div class="col-md-6">
-        <canvas tc-chartjs-line chart-options="lineChart" chart-data="monthlyData" auto-legend></canvas>
+        <div id="monthlyPie" class="pie">
+          <svg></svg>
+        </div>
+        <!-- <canvas tc-chartjs-line chart-options="lineChart" chart-data="monthlyData" auto-legend></canvas> -->
       </div>
     </div>
     <br />

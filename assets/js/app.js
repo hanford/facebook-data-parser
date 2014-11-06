@@ -1,4 +1,4 @@
-var app = angular.module('fbDataApp', ['tc.chartjs']);
+var app = angular.module('fbDataApp', []);
 
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
   $http.get('../../data.json').success(function(response) {
@@ -25,17 +25,30 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     // Checking property of object
     for (var prop in response.dayCount) {
-      messageWeekdays.push(prop)
-      messageWeekdayCount.push(response.dayCount[prop])
+      messageWeekdays.push({label: prop, value: response.dayCount[prop]})
     }
 
+    console.log(messageWeekdays)
+
     // Checking property of object
+    var monthLabel = 0;
     for (var prop in response.monthCount) {
-      messageMonthlyCount.push(response.monthCount[prop])
+      var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      messageMonthlyCount.push({label: month[monthLabel++], value: response.monthCount[prop]})
     }
+
+    console.log(messageMonthlyCount)
 
     for (var userName in $scope.messages) {
       var user = $scope.messages[userName];
+
+      // Potential ID name fix below
+      // if (userName.indexOf('@facebook.com') != -1) {
+      //   var hasID = userName.indexOf('@facebook.com');
+      //   // Hacky way of removing @facebook.com
+      //   var id = userName.slice(hasID, hasID + 13)
+      //   console.log(id)
+      // }
 
       if (user.hasOwnProperty('average')) {
         var messageTotal = user.messages.length;
@@ -51,8 +64,8 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.bestFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
 
-    // Slicing out top 200 friends
-    var topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length);
+    // if you have more then 200 friends, were only going to take the top 200.
+    messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length) : topFriends = messageMoods
 
     // sorting to lowest sentiment score
     topFriends.sort(function(a, b) {
@@ -61,72 +74,94 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     // Slicing lowest sentiment
     $scope.sadFriends = topFriends.slice(0, 20);
     topFriends.reverse();
-    // Slicing top sentiment
+    // Slicing top sentiment scores
     $scope.happyFriends = topFriends.slice(0, 20);
 
-    // ChartJS set up
-    $scope.weeklyData = {
-      labels: messageWeekdays,
-      datasets: [{
-        label: 'Conversations started by day',
-        fillColor: 'rgba(151,187,205,0.2)',
-        strokeColor: 'rgba(151,187,205,1)',
-        pointColor: 'rgba(151,187,205,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: messageWeekdayCount
-      }]
-    };
+    //Regular pie chart example
+    nv.addGraph(function() {
+      var chart = nv.models.pieChart()
+        .x(function(d) {
+          return d.label
+        })
+        .y(function(d) {
+          return d.value
+        })
+        .showLabels(true);
 
-    $scope.monthlyData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [{
-        label: 'Conversations started by Month',
-        fillColor: 'rgba(220,220,220,0.2)',
-        strokeColor: 'rgba(220,220,220,1)',
-        pointColor: 'rgba(220,220,220,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: messageMonthlyCount
-      }]
-    };
+      d3.select("#weeklyPie svg")
+        .datum(messageWeekdays)
+        .transition().duration(350)
+        .call(chart);
+
+      return chart;
+    });
+
+    nv.addGraph(function() {
+      var chart = nv.models.pieChart()
+        .x(function(d) {
+          return d.label
+        })
+        .y(function(d) {
+          return d.value
+        })
+        .showLabels(true);
+
+      d3.select("#monthlyPie svg")
+        .datum(messageMonthlyCount)
+        .transition().duration(350)
+        .call(chart);
+
+      return chart;
+    });
 
     $scope.yearly = [];
+    var vals = [];
 
     for (var prop in response.yearCount) {
-      var color = Please.make_color( );
-      var year = {
-        value: response.yearCount[prop],
-        color: color,
-        highlight: color,
-        label: prop,
+      var pos = {
+        x: prop,
+        y: response.yearCount[prop]
       };
-      $scope.yearly.push(year)
+      vals.push(pos);
     }
 
-        // Chart.js Options
-    $scope.pie =  {
-      // Sets the chart to be responsive
-      responsive: true,
-      //Boolean - Whether we should show a stroke on each segment
-      segmentShowStroke : true,
-      //String - The colour of each segment stroke
-      segmentStrokeColor : '#fff',
-      //Number - The width of each segment stroke
-      segmentStrokeWidth : 2,
-      //Number - The percentage of the chart that we cut out of the middle
-      percentageInnerCutout : 50, // This is 0 for Pie charts
-      //Number - Amount of animation steps
-      animationSteps : 100,
-      //String - Animation easing effect
-      animationEasing : 'easeOutBounce',
-      //Boolean - Whether we animate the rotation of the Doughnut
-      animateRotate : true,
-      //Boolean - Whether we animate scaling the Doughnut from the centre
-      animateScale : false,
-    };
+    $scope.yearly.push({
+      values: vals,
+      key: 'messages'
+    });
+
+    nv.addGraph(function() {
+      var chart = nv.models.lineChart()
+        .margin({
+          left: 100
+        }) //Adjust chart margins to give the x-axis some breathing room.
+        .useInteractiveGuideline(true) //We want nice looking tooltips and a guideline!
+        .transitionDuration(350) //how fast do you want the lines to transition?
+        .showLegend(true) //Show the legend, allowing users to turn on/off line series.
+        .showYAxis(true) //Show the y-axis
+        .showXAxis(true) //Show the x-axis
+      ;
+
+      chart.xAxis //Chart x-axis settings
+        .axisLabel('Year')
+        .tickFormat(d3.format('d'));
+
+      chart.yAxis //Chart y-axis settings
+        .axisLabel('# of Messages')
+        .tickFormat(d3.format('d'));
+
+      var myData = $scope.yearly;
+
+      d3.select('#messageActivty svg') //Select the <svg> element you want to render the chart in.
+        .datum($scope.yearly) //Populate the <svg> element with chart data...
+        .call(chart); //Finally, render the chart!
+
+      //Update the chart when window resizes.
+      nv.utils.windowResize(function() {
+        chart.update()
+      });
+      return chart;
+    });
 
     // ChartJS options
     $scope.lineChart = {
