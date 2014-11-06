@@ -17,19 +17,26 @@ input {
 		outline: none;
 		box-shadow: inset 0 -2px 0 rgba(132, 132, 132, 0.27);
 }
-li {
-		list-style: none;
-}
 .graph-cont {
 		/*width: 500px;*/
 		display: inline-block;
 		margin: 0 auto;
-		padding-bottom:60px;
+		padding-bottom: 60px;
 }
 
 .pie-cont {
 	width: 600px;
-	display: block;
+	display: inline-block;
 	margin: 0 auto;
-	padding-bottom:60px;
+	padding-bottom: 60px;
+}
+
+ul {
+	padding-left: 0;
+}
+
+li {
+	list-style: none;
+	/*position: relative;
+	left: 10px;*/
 }

@@ -38,27 +38,31 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       var user = $scope.messages[userName];
 
       if (user.hasOwnProperty('average')) {
-        user.average = Math.round(user.average * 100) / 100;
-        messageMoods.push([userName, user.average]);
-      }
-
-      if (user.hasOwnProperty('messages')) {
         var messageTotal = user.messages.length;
-        bestFriends.push([userName, messageTotal])
+        user.average = Math.round(user.average * 100) / 100;
+        messageMoods.push([userName, user.average, messageTotal]);
       }
     }
 
-    bestFriends.sort(function(a, b) {
-      return a[1] - b[1]
-    });
+    // Sorting Most active users based on total messages with user
     messageMoods.sort(function(a, b) {
-      return a[1] - b[1]
+      return a[2] - b[2]
     });
 
-    $scope.sadFriends = messageMoods.slice(0, 20);
-    $scope.happyFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
+    $scope.bestFriends = messageMoods.slice(messageMoods.length - 20, messageMoods.length).reverse();
 
-    $scope.bestFriends = bestFriends.slice(bestFriends.length - 20, bestFriends.length).reverse();
+    // Slicing out top 200 friends
+    var topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length);
+
+    // sorting to lowest sentiment score
+    topFriends.sort(function(a, b) {
+      return a[1] - b[1]
+    });
+    // Slicing lowest sentiment
+    $scope.sadFriends = topFriends.slice(0, 20);
+    topFriends.reverse();
+    // Slicing top sentiment
+    $scope.happyFriends = topFriends.slice(0, 20);
 
     // ChartJS set up
     $scope.weeklyData = {
@@ -113,7 +117,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       //Number - The width of each segment stroke
       segmentStrokeWidth : 2,
       //Number - The percentage of the chart that we cut out of the middle
-      percentageInnerCutout : 20, // This is 0 for Pie charts
+      percentageInnerCutout : 50, // This is 0 for Pie charts
       //Number - Amount of animation steps
       animationSteps : 100,
       //String - Animation easing effect
@@ -121,10 +125,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       //Boolean - Whether we animate the rotation of the Doughnut
       animateRotate : true,
       //Boolean - Whether we animate scaling the Doughnut from the centre
-      animateScale : true,
-      //String - A legend template
-      legendTemplate : '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
-
+      animateScale : false,
     };
 
     // ChartJS options
