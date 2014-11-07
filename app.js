@@ -7,7 +7,6 @@ var HTMLParser = require('fast-html-parser');
 // Will use for names returned as id@facebook.com
 // var FB = require('fb');
 // FB.setAccessToken('token');
-
 fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   if (err) throw err;
   var root = HTMLParser.parse(content.toString());

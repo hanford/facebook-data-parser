@@ -5,18 +5,28 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     console.log(response)
 
     $scope.messages = response.userMessages;
+    var dictionary = response.dictionary;
 
     var messageMoods = [];
     var bestFriends = [];
     var wordCount = [];
 
-    for (var word in response.dictionary) {
-      // Grabs words used more then 500 times, throws out spaces ""
-      if (response.dictionary[word] > 500 && word.length > 0) {
-
-        // wordCount.push(word + ' ' + response.dictionary[word])
+    for (var word in dictionary) {
+      // Words detected more then 200 times
+      if (dictionary[word] > 150 && word.length > 0) {
+        var commonWords = {
+          'text': word,
+          'count': dictionary[word]
+        };
+        wordCount.push(commonWords)
       }
     }
+
+    wordCount.sort(function(a, b) {
+      return a.count - b.count
+    });
+
+    $scope.words = wordCount.reverse();
 
     // Checking property of object
     var messageWeekdays = [];
@@ -78,41 +88,40 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         'values': []
       })
       for (var times in top20Contacts[friend][3]) {
-        if (times === 1) { console.log('t1'); }
+        // if (times == 1) { debugger }
         bestFriends[friend]['values'].push([parseInt(times), top20Contacts[friend][3][times]]);
       }
     }
 
-    // console.log(JSON.stringify(bestFriends, null, 4));
-
-  // nv.addGraph(function() {
-  //   var chart = nv.models.stackedAreaChart()
-  //                 .margin({right: 100})
-  //                 .x(function(d) { return d[0] })   //We can modify the data accessor functions...
-  //                 .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
-  //                 .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
-  //                 .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
-  //                 .transitionDuration(500)
-  //                 .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
-  //                 .clipEdge(true);
-  //
-  //   //Format x-axis labels with custom function.
-  //   chart.xAxis
-  //       .tickFormat(function(d) {
-  //         return d3.time.format('%x')(new Date(d))
-  //   });
-  //
-  //   chart.yAxis
-  //       .tickFormat(d3.format(',.2f'));
-  //
-  //   d3.select('#besties svg')
-  //     .datum(bestFriends)
-  //     .call(chart);
-  //
-  //   nv.utils.windowResize(chart.update);
-  //
-  //   return chart;
-  // });
+//     console.log(JSON.stringify(bestFriends, null, 4));
+//   nv.addGraph(function() {
+//     var chart = nv.models.stackedAreaChart()
+//                   .margin({right: 100})
+//                   .x(function(d) { return d[0] })   //We can modify the data accessor functions...
+//                   .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
+//                   .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
+//                   .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
+//                   .transitionDuration(500)
+//                   .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+//                   .clipEdge(true);
+//
+//     //Format x-axis labels with custom function.
+//     chart.xAxis
+//         .tickFormat(function(d) {
+//           return d3.time.format('%x')(new Date(d))
+//     });
+//
+//     chart.yAxis
+//         .tickFormat(d3.format(',.2f'));
+//
+//     d3.select('#bestBuds svg')
+//       .datum(bestFriends)
+//       .call(chart);
+//
+//     nv.utils.windowResize(chart.update);
+//
+//     return chart;
+// });
 
     // if you have more then 200 friends, were only going to take the top 200.
     messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length) : topFriends = messageMoods

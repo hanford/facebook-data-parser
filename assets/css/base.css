@@ -46,5 +46,9 @@ li {
 }
 
 .sentiment {
-	height: 500px;
+	height: 400px
+}
+
+.big-padding {
+	padding-bottom: 200px;
 }

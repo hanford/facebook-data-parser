@@ -8,14 +8,14 @@
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
 
+  <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.js"></script>
   <script type="text/javascript" src="bower_components/nvd3/nv.d3.js"></script>
-  <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="node_modules/moment/moment.js"></script>
 </head>
 
-<body>
-  <div ng-app="fbDataApp" ng-controller="fbDataCtrl" class="container">
+<body ng-app="fbDataApp" ng-controller="fbDataCtrl">
+  <div class="container">
     <div class="row center">
       <h2>facebook data parser</h2>
       <br />
@@ -44,33 +44,45 @@
           <svg></svg>
         </div>
       </div>
-    </div>
-    <br />
-    <br />
-    <div class="row center">
-      <h3>Estimated sentiment analysis</h3>
-      <div class="col-md-12">
-        <div id="negative" class="sentiment">
-          <svg></svg>
+      <br />
+      <br />
+      <div class="row center">
+        <h3>Estimated sentiment analysis</h3>
+        <div class="col-md-6">
+          <div id="negative" class="sentiment">
+            <svg></svg>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="positive" class="sentiment">
+            <svg></svg>
+          </div>
         </div>
       </div>
-      <div class="col-md-12">
-        <div id="positive" class="sentiment">
-          <svg></svg>
-        </div>
-      </div>
-      </div>
     </div>
-    <br />
     <br />
     <div class="row">
       <div class="col-md-12">
-        <div id="besties">
+        <div id="bestBuds">
           <svg></svg>
+        </div>
       </div>
     </div>
-  </div>
-  <script type="text/javascript" src="assets/js/app.js"></script>
+    <div class="row">
+      <div class="col-md-4 big-padding">
+        <ul class="list-group">
+          <a href="javascript:(0);" class="list-group-item disabled">
+            Most used words
+          </a>
+          <li class="list-group-item"><input type="text" ng-model="search" class="form-control" placeholder="filter most used words"></li>
+          <li ng-repeat="word in words | filter:search" class="list-group-item">
+            <span class="badge">{{word.count}}</span>
+            {{word.text}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script type="text/javascript" src="assets/js/app.js"></script>
 </body>
 
 </html>
