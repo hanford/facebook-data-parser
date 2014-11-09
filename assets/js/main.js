@@ -1,4 +1,4 @@
-var app = angular.module('fbDataApp', []);
+var app = angular.module('fbDataApp', ['tc.chartjs']);
 
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
   $http.get('../../data.json').success(function(response) {
@@ -8,13 +8,12 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var dictionary = response.dictionary;
 
     var messageMoods = [];
-    var bestFriends = [];
     var wordCount = [];
     var yearlyMood = {};
 
     for (var word in dictionary) {
       // Words detected more then 200 times
-      if (dictionary[word] > 150 && word.length > 0) {
+      if (dictionary[word] > 200 && word.length > 0) {
         var commonWords = {
           'text': word,
           'count': dictionary[word]
@@ -102,8 +101,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         neg: 0
       };
 
-      console.log(year, yearlyMood[year].length);
-
       for (var i = 0; i < yearlyMood[year].length; i++) {
         var val = yearlyMood[year][i];
 
@@ -123,83 +120,89 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       sums[year].avg.neg = sums[year].neg / lengths.neg;
     }
 
-    console.log(sums)
+    // Mood based on positive and negative messages sent by year
+    var totalyears = [];
+    var positiveMessage = [];
+    var negativeMessage = [];
+    var activity = [];
+    var yearlyActivity = [];
 
-//     nv.addGraph(function() {
-//     var chart = nv.models.multiBarChart()
-//       .transitionDuration(350)
-//       .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-//       .rotateLabels(0)      //Angle to rotate x-axis labels.
-//       .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-//       .groupSpacing(0.1)    //Distance between each group of bars.
-//     ;
-//
-//     chart.xAxis
-//         .tickFormat(d3.format(',f'));
-//
-//     chart.yAxis
-//         .tickFormat(d3.format(',.1f'));
-//
-//     d3.select('#pos svg')
-//         .datum(sums)
-//         .call(chart);
-//
-//     nv.utils.windowResize(chart.update);
-//
-//     return chart;
-// });
+    for (var year in sums) {
+      var totalSent = {
+        x: year,
+        y: sums[year].lengths.pos + sums[year].lengths.neg
+      };
+      activity.push(totalSent);
+      totalyears.push(year)
+      positiveMessage.push(sums[year].lengths.pos)
+      negativeMessage.push(sums[year].lengths.neg)
+    }
+
+    yearlyActivity.push({
+      values: activity,
+      key: 'messages'
+    });
+
+    $scope.yearData = {
+      labels: totalyears,
+      datasets: [{
+        label: 'Negative Messages',
+        fillColor: 'rgba(220,220,220,0.5)',
+        strokeColor: 'rgba(220,220,220,0.8)',
+        highlightFill: 'rgba(220,220,220,0.75)',
+        highlightStroke: 'rgba(220,220,220,1)',
+        data: negativeMessage
+      }, {
+        label: 'Positive Messages',
+        fillColor: 'rgba(151,187,205,0.5)',
+        strokeColor: 'rgba(151,187,205,0.8)',
+        highlightFill: 'rgba(151,187,205,0.75)',
+        highlightStroke: 'rgba(151,187,205,1)',
+        data: positiveMessage
+      }]
+    };
+
+    // Chart.js Options
+    $scope.options = {
+      // Sets the chart to be responsive
+      responsive: true,
+      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+      scaleBeginAtZero: true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines: true,
+      //String - Colour of the grid lines
+      scaleGridLineColor: "rgba(0,0,0,.05)",
+      //Number - Width of the grid lines
+      scaleGridLineWidth: 1,
+      //Boolean - If there is a stroke on each bar
+      barShowStroke: true,
+      //Number - Pixel width of the bar stroke
+      barStrokeWidth: 2,
+      //Number - Spacing between each of the X value sets
+      barValueSpacing: 5,
+      //Number - Spacing between data sets within X values
+      barDatasetSpacing: 1,
+      //String - A legend template
+      legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="padding-left:10px;margin-right:5px;background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
 
     // Sorting Most active users based on messages
     messageMoods.sort(function(a, b) {
       return a[2] - b[2]
     });
 
-    var top20Contacts = messageMoods.slice(messageMoods.length - 10, messageMoods.length).reverse();
+    var top20Contacts = messageMoods.slice(messageMoods.length - 40, messageMoods.length).reverse();
 
-    var bestFriends = [];
+    $scope.bestFriends = [];
     for (var friend in top20Contacts) {
-      bestFriends.push({
-        'key': top20Contacts[friend][0],
-        'values': []
+      $scope.bestFriends.push({
+        'Name': top20Contacts[friend][0],
+        'TimesContacted': top20Contacts[friend][2]
       })
-      for (var times in top20Contacts[friend][3]) {
-        // if (times == 1) { debugger }
-        bestFriends[friend]['values'].push([parseInt(times), top20Contacts[friend][3][times]]);
-      }
     }
 
-    //     console.log(JSON.stringify(bestFriends, null, 4));
-    //   nv.addGraph(function() {
-    //     var chart = nv.models.stackedAreaChart()
-    //                   .margin({right: 100})
-    //                   .x(function(d) { return d[0] })   //We can modify the data accessor functions...
-    //                   .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
-    //                   .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
-    //                   .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
-    //                   .transitionDuration(500)
-    //                   .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
-    //                   .clipEdge(true);
-    //
-    //     //Format x-axis labels with custom function.
-    //     chart.xAxis
-    //         .tickFormat(function(d) {
-    //           return d3.time.format('%x')(new Date(d))
-    //     });
-    //
-    //     chart.yAxis
-    //         .tickFormat(d3.format(',.2f'));
-    //
-    //     d3.select('#bestBuds svg')
-    //       .datum(bestFriends)
-    //       .call(chart);
-    //
-    //     nv.utils.windowResize(chart.update);
-    //
-    //     return chart;
-    // });
-
     // if you have more then 200 friends, were only going to take the top 200.
-    messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length) : topFriends = messageMoods
+    messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 100, messageMoods.length) : topFriends = messageMoods
 
     // sorting to lowest sentiment score
     topFriends.sort(function(a, b) {
@@ -339,21 +342,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       return chart;
     });
 
-    $scope.yearly = [];
-    var vals = [];
-    for (var prop in response.yearCount) {
-      var pos = {
-        x: prop,
-        y: response.yearCount[prop]
-      };
-      vals.push(pos);
-    }
-
-    $scope.yearly.push({
-      values: vals,
-      key: 'messages'
-    });
-
     nv.addGraph(function() {
       var chart = nv.models.lineChart()
         .margin({
@@ -363,8 +351,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         .transitionDuration(350) //how fast do you want the lines to transition?
         .showLegend(false) //Show the legend, allowing users to turn on/off line series.
         .showYAxis(true) //Show the y-axis
-        .showXAxis(true) //Show the x-axis
-      ;
+        .showXAxis(true);
 
       chart.xAxis //Chart x-axis settings
         .axisLabel('Year')
@@ -374,7 +361,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
         .axisLabel('Number of Messages')
         .tickFormat(d3.format('d'));
       d3.select('#messageActivty svg') //Select the <svg> element you want to render the chart in.
-        .datum($scope.yearly) //Populate the <svg> element with chart data...
+        .datum(yearlyActivity) //Populate the <svg> element with chart data...
         .call(chart); //Finally, render the chart!
 
       //Update the chart when window resizes.

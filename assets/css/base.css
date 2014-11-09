@@ -49,6 +49,8 @@ li {
 	height: 400px
 }
 
-.big-padding {
-	padding-bottom: 200px;
+.center-graph-cont {
+	display: block;
+	margin: 0 auto;
+	width: 800px;
 }
