@@ -10,6 +10,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var messageMoods = [];
     var bestFriends = [];
     var wordCount = [];
+    var yearlyMood = {};
 
     for (var word in dictionary) {
       // Words detected more then 200 times
@@ -74,6 +75,80 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       }
     }
 
+    function recursiveIteration(object) {
+      for (var property in object) {
+        if (object.hasOwnProperty(property)) {
+          if (typeof object[property] == "object") {
+            recursiveIteration(object[property]);
+          } else {
+            var year = moment(object.timestamp, ['MMM D YYYY at h:mA']).year();
+            yearlyMood[year] ? yearlyMood[year].push(object.score) : yearlyMood[year] = [object.score];
+          }
+        }
+      }
+    }
+
+    recursiveIteration(response.calendar);
+
+    var sums = {};
+
+    for (var year in yearlyMood) {
+      sums[year] = {
+        pos: 0,
+        neg: 0
+      };
+      var lengths = {
+        pos: 0,
+        neg: 0
+      };
+
+      console.log(year, yearlyMood[year].length);
+
+      for (var i = 0; i < yearlyMood[year].length; i++) {
+        var val = yearlyMood[year][i];
+
+        if (val >= 0) {
+          sums[year].pos += val;
+          lengths.pos++;
+        } else {
+          sums[year].neg += val;
+          lengths.neg++;
+        }
+      }
+
+      sums[year].avg = {};
+      sums[year].lengths = lengths;
+
+      sums[year].avg.pos = sums[year].pos / lengths.pos;
+      sums[year].avg.neg = sums[year].neg / lengths.neg;
+    }
+
+    console.log(sums)
+
+//     nv.addGraph(function() {
+//     var chart = nv.models.multiBarChart()
+//       .transitionDuration(350)
+//       .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+//       .rotateLabels(0)      //Angle to rotate x-axis labels.
+//       .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+//       .groupSpacing(0.1)    //Distance between each group of bars.
+//     ;
+//
+//     chart.xAxis
+//         .tickFormat(d3.format(',f'));
+//
+//     chart.yAxis
+//         .tickFormat(d3.format(',.1f'));
+//
+//     d3.select('#pos svg')
+//         .datum(sums)
+//         .call(chart);
+//
+//     nv.utils.windowResize(chart.update);
+//
+//     return chart;
+// });
+
     // Sorting Most active users based on messages
     messageMoods.sort(function(a, b) {
       return a[2] - b[2]
@@ -93,35 +168,35 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       }
     }
 
-//     console.log(JSON.stringify(bestFriends, null, 4));
-//   nv.addGraph(function() {
-//     var chart = nv.models.stackedAreaChart()
-//                   .margin({right: 100})
-//                   .x(function(d) { return d[0] })   //We can modify the data accessor functions...
-//                   .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
-//                   .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
-//                   .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
-//                   .transitionDuration(500)
-//                   .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
-//                   .clipEdge(true);
-//
-//     //Format x-axis labels with custom function.
-//     chart.xAxis
-//         .tickFormat(function(d) {
-//           return d3.time.format('%x')(new Date(d))
-//     });
-//
-//     chart.yAxis
-//         .tickFormat(d3.format(',.2f'));
-//
-//     d3.select('#bestBuds svg')
-//       .datum(bestFriends)
-//       .call(chart);
-//
-//     nv.utils.windowResize(chart.update);
-//
-//     return chart;
-// });
+    //     console.log(JSON.stringify(bestFriends, null, 4));
+    //   nv.addGraph(function() {
+    //     var chart = nv.models.stackedAreaChart()
+    //                   .margin({right: 100})
+    //                   .x(function(d) { return d[0] })   //We can modify the data accessor functions...
+    //                   .y(function(d) { if (!d) { console.log(d); } return d[1] })   //...in case your data is formatted differently.
+    //                   .useInteractiveGuideline(true)    //Tooltips which show all data points. Very nice!
+    //                   .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
+    //                   .transitionDuration(500)
+    //                   .showControls(true)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
+    //                   .clipEdge(true);
+    //
+    //     //Format x-axis labels with custom function.
+    //     chart.xAxis
+    //         .tickFormat(function(d) {
+    //           return d3.time.format('%x')(new Date(d))
+    //     });
+    //
+    //     chart.yAxis
+    //         .tickFormat(d3.format(',.2f'));
+    //
+    //     d3.select('#bestBuds svg')
+    //       .datum(bestFriends)
+    //       .call(chart);
+    //
+    //     nv.utils.windowResize(chart.update);
+    //
+    //     return chart;
+    // });
 
     // if you have more then 200 friends, were only going to take the top 200.
     messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 200, messageMoods.length) : topFriends = messageMoods
@@ -276,8 +351,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     $scope.yearly.push({
       values: vals,
-      key: 'messages',
-      area: true
+      key: 'messages'
     });
 
     nv.addGraph(function() {
@@ -299,9 +373,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       chart.yAxis //Chart y-axis settings
         .axisLabel('Number of Messages')
         .tickFormat(d3.format('d'));
-
-      var myData = $scope.yearly;
-
       d3.select('#messageActivty svg') //Select the <svg> element you want to render the chart in.
         .datum($scope.yearly) //Populate the <svg> element with chart data...
         .call(chart); //Finally, render the chart!

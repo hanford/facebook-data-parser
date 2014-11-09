@@ -66,15 +66,15 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
       }
     }, '');
 
+    // Sentiment on facebook message, returns contextual mood of message
+    var sentimentScore = sentiment(messageTxt).score;
+
     var stamp = moment(timestamp, ['MMM D YYYY at h:mA']);
     var stampYear = stamp.year();
     yearCount[stampYear] ? yearCount[stampYear] ++ : yearCount[stampYear] = 1;
     var stampMonth = stamp.month();
     monthCount[stampMonth] ? monthCount[stampMonth] ++ : monthCount[stampMonth] = 1;
     var stampDay = stamp.date();
-
-    // Sentiment on facebook message, returns contextual mood of message
-    var sentimentScore = sentiment(messageTxt).score;
 
     if (!calendar[stampYear]) {
       calendar[stampYear] = {};
