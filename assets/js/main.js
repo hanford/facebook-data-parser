@@ -1,8 +1,13 @@
 var app = angular.module('fbDataApp', ['tc.chartjs']);
 
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
+  $scope.loading = true;
   $http.get('../../data.json').success(function(response) {
     console.log(response)
+
+    $timeout(function(){
+      $scope.loading = false;
+    }, 5000)
 
     $scope.messages = response.userMessages;
     var dictionary = response.dictionary;

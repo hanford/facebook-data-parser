@@ -39,6 +39,11 @@ li {
 	list-style: none;
 }
 
+.title {
+	font-weight: 900;
+	padding-bottom: 20px;
+}
+
 .pie {
 	height: 320px;
 }
