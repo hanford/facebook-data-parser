@@ -67,7 +67,7 @@
       <h3 class="title center">Total messages sent by year, seperated by estimated mood in message</h3>
       <div class="col-md-12">
         <div class="center-graph-cont">
-          <canvas tc-chartjs-bar chart-options="options" chart-data="yearData" auto-legend></canvas>
+          <canvas tc-chartjs-line chart-options="options" chart-data="yearData" auto-legend></canvas>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@
           <table class="table table-bordered table-striped">
             <tr>
               <td><b>#</b></td>
-              <td><b>Most Used Words</b></td>
+              <td><b>Top 40 Words</b></td>
               <td><b>Word Total</b></td>
             </tr>
             <tr ng-repeat="word in words">

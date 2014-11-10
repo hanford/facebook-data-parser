@@ -3,7 +3,7 @@ var app = angular.module('fbDataApp', ['tc.chartjs']);
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
   $http.get('../../data.json').success(function(response) {
     console.log(response)
-    
+
     $scope.messages = response.userMessages;
     var dictionary = response.dictionary;
 
@@ -26,7 +26,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       return a.count - b.count
     });
 
-    $scope.words = wordCount.reverse();
+    $scope.words = wordCount.reverse().slice(0, 40);
 
     // Checking property of object
     var messageWeekdays = [];
@@ -41,7 +41,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     var monthLabel = 0;
     var messageMonthlyCount = [];
     for (var prop in response.monthCount) {
-      var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       messageMonthlyCount.push({
         label: month[monthLabel++],
         value: response.monthCount[prop]
@@ -148,19 +148,23 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     $scope.yearData = {
       labels: totalyears,
       datasets: [{
-        label: ' Negative ',
-        fillColor: 'rgba(220,220,220,0.5)',
-        strokeColor: 'rgba(220,220,220,0.8)',
-        highlightFill: 'rgba(220,220,220,0.75)',
-        highlightStroke: 'rgba(220,220,220,1)',
-        data: negativeMessage
-      }, {
         label: 'Positive',
-        fillColor: 'rgba(72, 105, 160, 0.8)',
-        strokeColor: 'rgba(72, 105, 160, 0.9)',
-        highlightFill: 'rgba(72, 105, 160, 0.95)',
-        highlightStroke: 'rgba(72, 105, 160, 1)',
+        fillColor: 'rgba(220,220,220,0.2)',
+        strokeColor: 'rgba(220,220,220,1)',
+        pointColor: 'rgba(220,220,220,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(220,220,220,1)',
         data: positiveMessage
+      }, {
+        label: 'Negative',
+        fillColor: 'rgba(151,187,205,0.2)',
+        strokeColor: 'rgba(151,187,205,1)',
+        pointColor: 'rgba(151,187,205,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(151,187,205,1)',
+        data: negativeMessage
       }]
     };
 
@@ -203,7 +207,7 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       })
     }
 
-    // if you have more then 200 friends, were only going to take the top 200.
+    // if you have more then 200 friends, were only going to take the top 200... Might use later
     messageMoods.length > 200 ? topFriends = messageMoods.slice(messageMoods.length - 100, messageMoods.length) : topFriends = messageMoods
 
     // sorting to lowest sentiment score
