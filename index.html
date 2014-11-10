@@ -19,7 +19,7 @@
 
 <body ng-app="fbDataApp" ng-controller="fbDataCtrl">
   <div class="container center">
-    <h2>facebook data visualizer</h2>
+    <h1 class="title">Facebook data visualizer</h1>
     <br />
     <br />
     <div class="row row-cont">
@@ -33,13 +33,14 @@
     <br />
     <br />
     <div class="row row-cont">
-      <h3 class="title center">Total Monthly and Weekday Activity</h3>
       <div class="col-md-6">
+        <h3 class="title center">Weekday Activity</h3>
         <div id="weeklyPie" class="pie">
           <svg></svg>
         </div>
       </div>
       <div class="col-md-6">
+        <h3 class="title center">Monthly Activity</h3>
         <div id="monthlyPie" class="pie">
           <svg></svg>
         </div>
@@ -48,13 +49,14 @@
     <br />
     <br />
     <div class="row row-cont">
-      <h3 class="title center">Estimated sentiment analysis</h3>
       <div class="col-md-6">
+        <h3 class="title center">Lowest mood rating</h3>
         <div id="negative" class="sentiment">
           <svg></svg>
         </div>
       </div>
       <div class="col-md-6">
+        <h3 class="title center">Highest mood rating</h3>
         <div id="positive" class="sentiment">
           <svg></svg>
         </div>
@@ -62,7 +64,7 @@
     </div>
     <br />
     <div class="row row-cont">
-      <h3 class="title center">Total Positive / Negative messages</h3>
+      <h3 class="title center">Total messages sent by year, seperated by estimated mood in message</h3>
       <div class="col-md-12">
         <div class="center-graph-cont">
           <canvas tc-chartjs-bar chart-options="options" chart-data="yearData" auto-legend></canvas>
@@ -71,17 +73,17 @@
     </div>
     <br />
     <div class="row row-cont">
-      <h3 class="title center">Other Data</h3>
-      <div class="col-md-4">
+      <div class="col-md-4 col-md-offset-2">
+        <h3 class="title center">Popular Words</h3>
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <tr>
-              <td>#</td>
-              <td>Most Used Words</td>
-              <td>Word Total</td>
+              <td><b>#</b></td>
+              <td><b>Most Used Words</b></td>
+              <td><b>Word Total</b></td>
             </tr>
             <tr ng-repeat="word in words">
-              <td>{{$index}}</td>
+              <td>{{$index + 1}}</td>
               <td>{{word.text}}</td>
               <td>{{word.count}}</td>
             </tr>
@@ -89,12 +91,13 @@
         </div>
       </div>
       <div class="col-md-4">
+        <h3 class="title center">Popular Friends</h3>
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <tr>
-              <td>#</td>
-              <td>Top 40 Friends</td>
-              <td>Total Messages</td>
+              <td><b>#</b></td>
+              <td><b>Top 40 Friends</b></td>
+              <td><b>Total Messages</b></td>
             </tr>
             <tr ng-repeat="bestFriend in bestFriends">
               <td>{{$index + 1}}</td>
