@@ -17,15 +17,12 @@
 </head>
 
 <body ng-app="fbDataApp" ng-controller="fbDataCtrl">
-  <div class="container">
-    <div class="row center">
-      <h2>facebook data parser</h2>
-      <br />
-    </div>
+  <div class="container center">
+    <h2>facebook data visualizer</h2>
     <br />
     <br />
-    <div class="row center">
-      <h3>Total messages sent by year</h3>
+    <div class="row row-cont">
+      <h3 class="center">Total messages sent by year</h3>
       <div class="col-md-12">
         <div id="messageActivty">
           <svg></svg>
@@ -34,8 +31,8 @@
     </div>
     <br />
     <br />
-    <div class="row center">
-      <h3>Total Monthly and Weekday Activity</h3>
+    <div class="row row-cont">
+      <h3 class="center">Total Monthly and Weekday Activity</h3>
       <div class="col-md-6">
         <div id="weeklyPie" class="pie">
           <svg></svg>
@@ -46,25 +43,25 @@
           <svg></svg>
         </div>
       </div>
-      <br />
-      <br />
-      <div class="row center">
-        <h3>Estimated sentiment analysis</h3>
-        <div class="col-md-6">
-          <div id="negative" class="sentiment">
-            <svg></svg>
-          </div>
+    </div>
+    <br />
+    <br />
+    <div class="row row-cont">
+      <h3 class="center">Estimated sentiment analysis</h3>
+      <div class="col-md-6">
+        <div id="negative" class="sentiment">
+          <svg></svg>
         </div>
-        <div class="col-md-6">
-          <div id="positive" class="sentiment">
-            <svg></svg>
-          </div>
+      </div>
+      <div class="col-md-6">
+        <div id="positive" class="sentiment">
+          <svg></svg>
         </div>
       </div>
     </div>
     <br />
-    <div class="row center">
-      <h3>Total Positive / Negative messages</h3>
+    <div class="row row-cont">
+      <h3 class="center">Total Positive / Negative messages</h3>
       <div class="col-md-12">
         <div class="center-graph-cont">
           <canvas tc-chartjs-bar chart-options="options" chart-data="yearData" auto-legend></canvas>
@@ -72,10 +69,8 @@
       </div>
     </div>
     <br />
-    <div class="row">
-      <div class="col-md-12">
-        <h3>Other Data</h3>
-      </div>
+    <div class="row row-cont">
+      <h3 class="center">Other Data</h3>
       <div class="col-md-4">
         <div class="table-responsive">
           <table class="table table-bordered table-striped">

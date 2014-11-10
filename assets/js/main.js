@@ -140,24 +140,26 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     yearlyActivity.push({
       values: activity,
+      area: true,
+      color: '#405E9B',
       key: 'messages'
     });
 
     $scope.yearData = {
       labels: totalyears,
       datasets: [{
-        label: 'Negative Messages',
+        label: ' Negative ',
         fillColor: 'rgba(220,220,220,0.5)',
         strokeColor: 'rgba(220,220,220,0.8)',
         highlightFill: 'rgba(220,220,220,0.75)',
         highlightStroke: 'rgba(220,220,220,1)',
         data: negativeMessage
       }, {
-        label: 'Positive Messages',
-        fillColor: 'rgba(151,187,205,0.5)',
-        strokeColor: 'rgba(151,187,205,0.8)',
-        highlightFill: 'rgba(151,187,205,0.75)',
-        highlightStroke: 'rgba(151,187,205,1)',
+        label: 'Positive',
+        fillColor: 'rgba(72, 105, 160, 0.8)',
+        strokeColor: 'rgba(72, 105, 160, 0.9)',
+        highlightFill: 'rgba(72, 105, 160, 0.95)',
+        highlightStroke: 'rgba(72, 105, 160, 1)',
         data: positiveMessage
       }]
     };
@@ -213,12 +215,12 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
     var negative = {
       "key": "Negative",
-      "color": "#d67777",
+      "color": "#F3313A",
       "values": []
     };
     var positive = {
       "key": "Positive",
-      "color": "#4f99b4",
+      "color": "#4F6DA0",
       "values": []
     };
 
