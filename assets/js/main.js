@@ -4,9 +4,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', 'facebookdata', fun
   $http.get('../../data.json').success(function(response) {
     $scope.response = response;
 
-    $scope.yearlyMessages = facebookdata.yearlyActivity(response);
-    // $scope.totalyears = facebookdata.parseYear($scope.yearlyMessages);
-
     $scope.messages = response.userMessages;
     var dictionary = response.dictionary;
 

@@ -1,6 +1,6 @@
 angular.module('messageDuration', ['facebook-factory'])
 
-.directive('messageDuration', function(facebookdata, $http) {
+.directive('messageDuration', function(facebookdata) {
   return {
     restrict: 'E',
     scope: false,
@@ -10,6 +10,7 @@ angular.module('messageDuration', ['facebook-factory'])
         if (newValue) {
           var response = newValue;
           var yearlyMessages = facebookdata.yearlyActivity(response);
+          debugger
           var totalyears = facebookdata.parseYear(yearlyMessages);
           var activity = [];
           var yearlyActivity = [];
