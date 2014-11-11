@@ -1,10 +1,11 @@
 angular.module('facebook-factory', [])
 
-.factory('facebookdata', function($http) {
+.factory('facebookdata', function($http, $timeout) {
   var yearlyMood = {};
   return {
     yearlyActivity: function(data) {
       yearlySentiment(data.calendar);
+
       function yearlySentiment(object) {
         for (var property in object) {
           if (object.hasOwnProperty(property)) {

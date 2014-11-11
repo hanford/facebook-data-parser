@@ -2,6 +2,11 @@ var app = angular.module('fbDataApp', ['tc.chartjs', 'messageDuration', 'monthly
 
 app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', 'facebookdata', function($scope, $timeout, $http, facebookdata) {
   $http.get('../../data.json').success(function(response) {
+    $scope.response = response;
+
+    $scope.yearlyMessages = facebookdata.yearlyActivity(response);
+    // $scope.totalyears = facebookdata.parseYear($scope.yearlyMessages);
+
     $scope.messages = response.userMessages;
     var dictionary = response.dictionary;
 
