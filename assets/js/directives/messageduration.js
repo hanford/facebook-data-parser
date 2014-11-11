@@ -3,10 +3,10 @@ angular.module('fbDataApp')
 .directive('messageDuration', function(facebookdata) {
   function messageDuration(value) {
     if (!value) {
-      return;
+      return
     }
-    var response = value;
-    var yearlyMessages = facebookdata.yearlyActivity(response);
+    var calendar = value;
+    var yearlyMessages = facebookdata.yearlyActivity(calendar);
     var totalyears = facebookdata.parseYear(yearlyMessages);
     var activity = [];
     var yearlyActivity = [];

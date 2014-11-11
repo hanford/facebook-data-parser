@@ -57,11 +57,18 @@ li {
 	margin: 0 auto;
 	width: 800px;
 }
-.row-cont {
+.row {
 	padding: 20px;
 	margin-bottom: 40px;
 	border-radius: 4px;
 	border: 1px solid #D2D2D2;
 	background: #fff;
 	box-shadow: 0px 1px 5px #ddd;
+}
+.no-padding-bottom {
+	padding-bottom: 0;
+}
+
+.no-margin {
+	margin: 0;
 }

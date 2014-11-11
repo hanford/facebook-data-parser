@@ -12,7 +12,7 @@ angular.module('fbDataApp')
 
         var wordCount = [];
 
-        var dictionary = value.dictionary;
+        var dictionary = value;
         for (var word in dictionary) {
           if (dictionary[word] > 200 && word.length > 0) {
             var commonWords = {

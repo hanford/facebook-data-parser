@@ -5,14 +5,14 @@ angular.module('fbDataApp')
     if (!value) {
       return;
     }
-    var response = value;
+    var monthCount = value;
     var monthLabel = 0;
     var messageMonthlyCount = [];
-    for (var prop in response.monthCount) {
+    for (var prop in monthCount) {
       var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       messageMonthlyCount.push({
         label: month[monthLabel++],
-        value: response.monthCount[prop]
+        value: monthCount[prop]
       })
     }
     nv.addGraph(function() {

@@ -3,13 +3,14 @@ var app = angular.module('fbDataApp', ['tc.chartjs', 'facebook-factory']);
 app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', function($scope, $http, facebookdata) {
   $http.get('../../data.json').success(function(response) {
     $scope.response = response;
-    
+
     // Mood based on positive and negative messages sent by year
     var totalyears = [];
     var positiveMessage = [];
     var negativeMessage = [];
     var yearlyMood = {};
-    var yearlyMood = facebookdata.yearlyActivity(response);
+
+    var yearlyMood = facebookdata.yearlyActivity(response.calendar);
     var sums = facebookdata.parseYear(yearlyMood);
 
     for (var year in sums) {

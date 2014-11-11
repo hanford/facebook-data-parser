@@ -25,6 +25,7 @@ angular.module('fbDataApp')
         var top20Contacts = friends.slice(friends.length - 40, friends.length).reverse();
         scope.bestFriends = [];
         for (var friend in top20Contacts) {
+          // ID Fix below, commented out so I don't get rate limited by facebook. =)
           // if (top20Contacts[friend][0].indexOf("@") > -1) {
           //   var facebookEmail = top20Contacts[friend][0];
           //   var id = facebookEmail.substring(0, top20Contacts[friend][0].indexOf("@"));
