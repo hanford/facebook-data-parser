@@ -22,6 +22,7 @@ angular.module('facebook-factory', [])
     },
     parseYear: function(yearlyMood) {
       var sums = {};
+
       for (var year in yearlyMood) {
         sums[year] = {
           pos: 0,

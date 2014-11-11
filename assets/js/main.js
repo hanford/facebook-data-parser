@@ -51,19 +51,33 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', 'facebookdata', fun
 
     $scope.bestFriends = [];
     for (var friend in top20Contacts) {
-      $scope.bestFriends.push({
-        'Name': top20Contacts[friend][0],
-        'TimesContacted': top20Contacts[friend][1]
-      })
+      $scope.name = "";
+      if (top20Contacts[friend][0].indexOf("@") > -1) {
+        var facebookEmail = top20Contacts[friend][0];
+        var toCut = top20Contacts[friend][0].indexOf("@");
+        var id = facebookEmail.substring(0, toCut);
+        $http.get('https://graph.facebook.com/' + id).then(function(response) {
+          $scope.bestFriends.push({
+            'Name': response.data.name,
+            'TimesContacted': top20Contacts[friend][1]
+          })
+        })
+      } else {
+        $scope.bestFriends.push({
+          'Name': top20Contacts[friend][0],
+          'TimesContacted': top20Contacts[friend][1]
+        })
+      }
     }
 
 
     // var yearlyMood = facebookdata.yearlyActivity(response);
-    var sums = facebookdata.parseYear(yearlyMood);
+
     // Mood based on positive and negative messages sent by year
     var totalyears = [];
     var positiveMessage = [];
     var negativeMessage = [];
+    var sums = {};
 
     for (var year in sums) {
       totalyears.push(year)
