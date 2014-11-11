@@ -1,0 +1,20 @@
+<div class="col-md-4">
+  <h3 class="title center">Popular Friends</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <tr>
+        <td><b>#</b>
+        </td>
+        <td><b>Top 40 Friends</b>
+        </td>
+        <td><b>Total Messages</b>
+        </td>
+      </tr>
+      <tr ng-repeat="bestFriend in bestFriends">
+        <td>{{$index + 1}}</td>
+        <td>{{bestFriend.Name}}</td>
+        <td>{{bestFriend.TimesContacted}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

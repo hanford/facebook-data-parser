@@ -20,19 +20,14 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     fullname = element.childNodes[0].rawText;
   })
 
-
-  // CSV for potential d3 graph
-  // var stream = fs.createWriteStream('data.csv');
-  // stream.write('key, value, date' + '\n');
-  // stream.end();
-  // stream.write(userName + ',' + sentimentScore + ',' + timestamp + '\n');
-
   var calendar = {};
   var userMessages = {};
   var dict = {};
   var dayCount = {};
   var monthCount = {};
 
+  // var stream = fs.createWriteStream('data.csv');
+  // stream.write('key, value, date' + '\n');
   message.map(function(element, idx) {
     console.log(idx + ' messages');
 
@@ -73,6 +68,8 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     var stampMonth = stamp.month();
     monthCount[stampMonth] ? monthCount[stampMonth] ++ : monthCount[stampMonth] = 1;
     var stampDay = stamp.date();
+    // var messageDate = stampMonth + '/' + stampDay + '/' + stampYear;
+    // stream.write(userName + ',' + sentimentScore + ',' + messageDate + '\n');
 
     if (!calendar[stampYear]) {
       calendar[stampYear] = {};
@@ -105,6 +102,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     userMessages[userName].messages.push(computedMessage);
     calendar[stampYear][stampMonth][stampDay][userName].push(computedMessage);
   });
+  // stream.end();
 
   for (var user in userMessages) {
     var messages = userMessages[user].messages;

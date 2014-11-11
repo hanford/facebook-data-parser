@@ -57,9 +57,9 @@ li {
 	margin: 0 auto;
 	width: 800px;
 }
-
 .row-cont {
 	padding: 20px;
+	margin-bottom: 40px;
 	border-radius: 4px;
 	border: 1px solid #D2D2D2;
 	background: #fff;

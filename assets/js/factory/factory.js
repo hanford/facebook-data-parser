@@ -1,15 +1,15 @@
 angular.module('facebook-factory', [])
 
 .factory('facebookdata', function($http, $timeout) {
-  var yearlyMood = {};
   return {
     yearlyActivity: function(data) {
+      var yearlyMood = {};
       yearlySentiment(data.calendar);
-
       function yearlySentiment(object) {
         for (var property in object) {
           if (object.hasOwnProperty(property)) {
             if (typeof object[property] == "object") {
+              // Restart
               yearlySentiment(object[property]);
             } else {
               var year = moment(object.timestamp, ['MMM D YYYY at h:mA']).year();

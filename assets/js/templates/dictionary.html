@@ -1,0 +1,20 @@
+<div class="col-md-4 col-md-offset-2">
+  <h3 class="title center">Popular Words</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <tr>
+        <td><b>#</b>
+        </td>
+        <td><b>Top 40 Words</b>
+        </td>
+        <td><b>Word Total</b>
+        </td>
+      </tr>
+      <tr ng-repeat="word in words">
+        <td>{{$index + 1}}</td>
+        <td>{{word.text}}</td>
+        <td>{{word.count}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

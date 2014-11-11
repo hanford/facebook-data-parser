@@ -1,4 +1,4 @@
-angular.module('sentimentFriends', ['facebook-factory'])
+angular.module('fbDataApp')
   .directive('sentimentFriends', function(facebookdata) {
     return {
       restrict: 'E',
