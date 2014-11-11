@@ -1,9 +1,7 @@
-var app = angular.module('fbDataApp', ['tc.chartjs']);
+var app = angular.module('fbDataApp', ['tc.chartjs', 'messageDuration', 'monthlyPie', 'weeklyPie', 'facebook-factory']);
 
-app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
+app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', 'facebookdata', function($scope, $timeout, $http, facebookdata) {
   $http.get('../../data.json').success(function(response) {
-    console.log(response)
-
     $scope.messages = response.userMessages;
     var dictionary = response.dictionary;
 
@@ -27,26 +25,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
     });
 
     $scope.words = wordCount.reverse().slice(0, 40);
-
-    // Checking property of object
-    var messageWeekdays = [];
-    for (var prop in response.dayCount) {
-      messageWeekdays.push({
-        label: prop,
-        value: response.dayCount[prop]
-      })
-    }
-
-    // Checking property of object
-    var monthLabel = 0;
-    var messageMonthlyCount = [];
-    for (var prop in response.monthCount) {
-      var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      messageMonthlyCount.push({
-        label: month[monthLabel++],
-        value: response.monthCount[prop]
-      })
-    }
 
     for (var userName in $scope.messages) {
       var user = $scope.messages[userName];
@@ -74,76 +52,19 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
       }
     }
 
-    function recursiveIteration(object) {
-      for (var property in object) {
-        if (object.hasOwnProperty(property)) {
-          if (typeof object[property] == "object") {
-            recursiveIteration(object[property]);
-          } else {
-            var year = moment(object.timestamp, ['MMM D YYYY at h:mA']).year();
-            yearlyMood[year] ? yearlyMood[year].push(object.score) : yearlyMood[year] = [object.score];
-          }
-        }
-      }
-    }
 
-    recursiveIteration(response.calendar);
-
-    var sums = {};
-
-    for (var year in yearlyMood) {
-      sums[year] = {
-        pos: 0,
-        neg: 0
-      };
-      var lengths = {
-        pos: 0,
-        neg: 0
-      };
-
-      for (var i = 0; i < yearlyMood[year].length; i++) {
-        var val = yearlyMood[year][i];
-
-        if (val >= 0) {
-          sums[year].pos += val;
-          lengths.pos++;
-        } else {
-          sums[year].neg += val;
-          lengths.neg++;
-        }
-      }
-
-      sums[year].avg = {};
-      sums[year].lengths = lengths;
-
-      sums[year].avg.pos = sums[year].pos / lengths.pos;
-      sums[year].avg.neg = sums[year].neg / lengths.neg;
-    }
-
+    // var yearlyMood = facebookdata.yearlyActivity(response);
+    var sums = facebookdata.parseYear(yearlyMood);
     // Mood based on positive and negative messages sent by year
     var totalyears = [];
     var positiveMessage = [];
     var negativeMessage = [];
-    var activity = [];
-    var yearlyActivity = [];
 
     for (var year in sums) {
-      var totalSent = {
-        x: year,
-        y: sums[year].lengths.pos + sums[year].lengths.neg
-      };
-      activity.push(totalSent);
       totalyears.push(year)
       positiveMessage.push(sums[year].lengths.pos)
       negativeMessage.push(sums[year].lengths.neg)
     }
-
-    yearlyActivity.push({
-      values: activity,
-      area: true,
-      color: '#405E9B',
-      key: 'messages'
-    });
 
     $scope.yearData = {
       labels: totalyears,
@@ -308,72 +229,6 @@ app.controller('fbDataCtrl', ['$scope', '$timeout', '$http', function($scope, $t
 
       nv.utils.windowResize(chart.update);
 
-      return chart;
-    });
-
-    //Regular pie chart example
-    nv.addGraph(function() {
-      var chart = nv.models.pieChart()
-        .x(function(d) {
-          return d.label
-        })
-        .y(function(d) {
-          return d.value
-        })
-        .showLabels(true);
-
-      d3.select("#weeklyPie svg")
-        .datum(messageWeekdays)
-        .transition().duration(350)
-        .call(chart);
-
-      return chart;
-    });
-
-    nv.addGraph(function() {
-      var chart = nv.models.pieChart()
-        .x(function(d) {
-          return d.label
-        })
-        .y(function(d) {
-          return d.value
-        })
-        .showLabels(true);
-
-      d3.select("#monthlyPie svg")
-        .datum(messageMonthlyCount)
-        .transition().duration(350)
-        .call(chart);
-
-      return chart;
-    });
-
-    nv.addGraph(function() {
-      var chart = nv.models.lineChart()
-        .margin({
-          left: 100
-        }) //Adjust chart margins to give the x-axis some breathing room.
-        .useInteractiveGuideline(true) //We want nice looking tooltips and a guideline!
-        .transitionDuration(350) //how fast do you want the lines to transition?
-        .showLegend(false) //Show the legend, allowing users to turn on/off line series.
-        .showYAxis(true) //Show the y-axis
-        .showXAxis(true);
-
-      chart.xAxis //Chart x-axis settings
-        .axisLabel('Year')
-        .tickFormat(d3.format('d'));
-
-      chart.yAxis //Chart y-axis settings
-        .axisLabel('Number of Messages')
-        .tickFormat(d3.format('d'));
-      d3.select('#messageActivty svg') //Select the <svg> element you want to render the chart in.
-        .datum(yearlyActivity) //Populate the <svg> element with chart data...
-        .call(chart); //Finally, render the chart!
-
-      //Update the chart when window resizes.
-      nv.utils.windowResize(function() {
-        chart.update()
-      });
       return chart;
     });
 

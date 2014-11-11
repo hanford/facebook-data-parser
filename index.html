@@ -6,7 +6,6 @@
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
-  <link rel="stylesheet" type="text/css" href="bower_components/ionicons/css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
 
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
@@ -25,26 +24,14 @@
     <div class="row row-cont">
       <h3 class="title center">Total messages sent by year</h3>
       <div class="col-md-12">
-        <div id="messageActivty">
-          <svg></svg>
-        </div>
+        <message-duration></message-duration>
       </div>
     </div>
     <br />
     <br />
     <div class="row row-cont">
-      <div class="col-md-6">
-        <h3 class="title center">Weekday Activity</h3>
-        <div id="weeklyPie" class="pie">
-          <svg></svg>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h3 class="title center">Monthly Activity</h3>
-        <div id="monthlyPie" class="pie">
-          <svg></svg>
-        </div>
-      </div>
+      <weekly-pie></weekly-pie>
+      <monthly-pie></monthly-pie>
     </div>
     <br />
     <br />
@@ -78,9 +65,12 @@
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <tr>
-              <td><b>#</b></td>
-              <td><b>Top 40 Words</b></td>
-              <td><b>Word Total</b></td>
+              <td><b>#</b>
+              </td>
+              <td><b>Top 40 Words</b>
+              </td>
+              <td><b>Word Total</b>
+              </td>
             </tr>
             <tr ng-repeat="word in words">
               <td>{{$index + 1}}</td>
@@ -95,9 +85,12 @@
         <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <tr>
-              <td><b>#</b></td>
-              <td><b>Top 40 Friends</b></td>
-              <td><b>Total Messages</b></td>
+              <td><b>#</b>
+              </td>
+              <td><b>Top 40 Friends</b>
+              </td>
+              <td><b>Total Messages</b>
+              </td>
             </tr>
             <tr ng-repeat="bestFriend in bestFriends">
               <td>{{$index + 1}}</td>
@@ -108,6 +101,10 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript" src="assets/js/factory/factory.js"></script>
+    <script type="text/javascript" src="assets/js/directives/messageduration.js"></script>
+    <script type="text/javascript" src="assets/js/directives/monthlypie.js"></script>
+    <script type="text/javascript" src="assets/js/directives/weeklyPie.js"></script>
     <script type="text/javascript" src="assets/js/main.js"></script>
 </body>
 
