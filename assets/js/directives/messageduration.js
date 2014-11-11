@@ -10,7 +10,6 @@ angular.module('messageDuration', ['facebook-factory'])
         if (newValue) {
           var response = newValue;
           var yearlyMessages = facebookdata.yearlyActivity(response);
-          debugger
           var totalyears = facebookdata.parseYear(yearlyMessages);
           var activity = [];
           var yearlyActivity = [];
