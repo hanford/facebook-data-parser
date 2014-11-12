@@ -1,6 +1,6 @@
 data/*
 .DS_*
 node_modules/*
-facebo*
 bower_components/*
+facebook*
 data*

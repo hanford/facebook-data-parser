@@ -2,9 +2,9 @@ angular.module('facebook-factory', [])
 
 .factory('facebookdata', function($http, $timeout) {
   return {
-    yearlyActivity: function(data) {
+    yearlyActivity: function(calendar) {
       var yearlyMood = {};
-      yearlySentiment(data.calendar);
+      yearlySentiment(calendar);
       function yearlySentiment(object) {
         for (var property in object) {
           if (object.hasOwnProperty(property)) {
@@ -19,6 +19,26 @@ angular.module('facebook-factory', [])
         }
       }
       return yearlyMood;
+    },
+    setFriends: function(value) {
+      var userMessages = value;
+      var messageMoods = [];
+      for (var userName in userMessages) {
+        var user = userMessages[userName];
+        if (user.hasOwnProperty('average')) {
+          var messageTotal = user.messages.length;
+          user.average = Math.round(user.average * 100) / 100;
+          timestampCount = {};
+          user.messages[userName];
+          for (var count in user.messages) {
+            var timestamp = user.messages[count].timestamp;
+            var stamp = moment(timestamp, ['MMM D YYYY at h:mA']).valueOf();
+            timestampCount[stamp] ? timestampCount[stamp] ++ : timestampCount[stamp] = 1;
+          }
+          messageMoods.push([userName, user.average, messageTotal, timestampCount]);
+        }
+      }
+      return messageMoods;
     },
     parseYear: function(yearlyMood) {
       var sums = {};

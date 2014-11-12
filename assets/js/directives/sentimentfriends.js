@@ -1,5 +1,5 @@
 angular.module('fbDataApp')
-  .directive('sentimentFriends', function(facebookdata) {
+  .directive('sentimentFriends', function(facebookdata, $http) {
     return {
       restrict: 'E',
       scope: false,
@@ -10,7 +10,7 @@ angular.module('fbDataApp')
             return;
           }
           var userFormatted = facebookdata.setFriends(value);
-          // Sort by messages involved in
+          // Sort by messages participated in
           userFormatted.sort(function(a, b) {
             return a[2] - b[2]
           });
@@ -32,18 +32,40 @@ angular.module('fbDataApp')
           };
           var negative20 = topFriends.slice(0, 20);
           for (var user in negative20) {
-            negative["values"].push({
-              label: topFriends[user][0],
-              value: negative20[user][1]
-            })
+            if (negative20[user][0].indexOf("@") > -1) {
+              var facebookEmail = negative20[user][0];
+              var id = facebookEmail.substring(0, negative20[user][0].indexOf("@"));
+              $http.get('https://graph.facebook.com/' + id).then(function(response) {
+                negative["values"].push({
+                  label: response.data.name,
+                  value: negative20[user][1]
+                })
+              })
+            } else {
+              negative["values"].push({
+                label: topFriends[user][0],
+                value: negative20[user][1]
+              })
+            }
           }
           topFriends.reverse();
           var positive20 = topFriends.slice(0, 20);
           for (var user in positive20) {
-            positive["values"].push({
-              label: topFriends[user][0],
-              value: positive20[user][1]
-            })
+            if (positive20[user][0].indexOf("@") > -1) {
+              var facebookEmail = positive20[user][0];
+              var id = facebookEmail.substring(0, positive20[user][0].indexOf("@"));
+              $http.get('https://graph.facebook.com/' + id).then(function(response) {
+                positive["values"].push({
+                  label: response.data.name,
+                  value: positive20[user][1]
+                })
+              })
+            } else {
+              positive["values"].push({
+                label: topFriends[user][0],
+                value: positive20[user][1]
+              })
+            }
           }
           var negativeChart = [];
           var positiveChart = [];

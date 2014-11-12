@@ -1,6 +1,6 @@
 var app = angular.module('fbDataApp', ['tc.chartjs', 'facebook-factory']);
 
-app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', function($scope, $http, facebookdata) {
+app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', function($scope, $http, facebookdata, $timeout) {
   $http.get('../../data.json').success(function(response) {
     $scope.response = response;
 
