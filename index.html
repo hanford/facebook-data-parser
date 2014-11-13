@@ -25,6 +25,12 @@
     <div class="row">
       <weekly-pie value="response.dayCount"></weekly-pie>
       <monthly-pie value="response.monthCount"></monthly-pie>
+      <h3 class="title center">Total messages sent by hour</h3>
+      <div class="col-md-12">
+        <div class="center-graph-cont">
+          <canvas tc-chartjs-line chart-options="options" chart-data="hourlyActivity" auto-legend></canvas>
+        </div>
+      </div>
     </div>
     <div class="row">
       <sentiment-friends value="response.userMessages"></sentiment-friends>
