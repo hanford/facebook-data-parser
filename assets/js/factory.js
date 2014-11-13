@@ -20,6 +20,23 @@ angular.module('facebook-factory', [])
       }
       return yearlyMood;
     },
+    hourlyAct: function(calendar) {
+      var hourlyAct = {};
+      grabHours(calendar);
+      function grabHours(object) {
+        for (var property in object) {
+          if (object.hasOwnProperty(property)) {
+            if (typeof object[property] == "object") {
+              grabHours(object[property]);
+            } else {
+              var hour = moment(object.timestamp, ['MMM D YYYY at h:mA']).hour();
+              hourlyAct[hour] ? hourlyAct[hour] ++ : hourlyAct[hour] = 1;
+            }
+          }
+        }
+      }
+      return hourlyAct;
+    },
     setFriends: function(value) {
       var userMessages = value;
       var messageMoods = [];

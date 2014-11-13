@@ -12,6 +12,29 @@ app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', fun
 
     var yearlyMood = facebookdata.yearlyActivity(response.calendar);
     var sums = facebookdata.parseYear(yearlyMood);
+    var hourlyMessages = facebookdata.hourlyAct(response.calendar);
+
+    var totalhours =[];
+    var messagesSent = [];
+
+    for (var hour in hourlyMessages) {
+      totalhours.push(moment(hour, ['H']).format('h a'));
+      messagesSent.push(hourlyMessages[hour])
+    }
+
+    $scope.hourlyActivity = {
+      labels: totalhours,
+      datasets: [{
+        label: 'Messages sent by hour',
+        fillColor: 'rgba(81, 114, 158, 0.55)',
+        strokeColor: 'rgba(81, 114, 158, 0.95)',
+        pointColor: 'rgba(81, 114, 158, 1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(81, 114, 158, 95)',
+        data: messagesSent
+      }]
+    };
 
     for (var year in sums) {
       totalyears.push(year)
