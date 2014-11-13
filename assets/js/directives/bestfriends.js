@@ -27,21 +27,21 @@ angular.module('fbDataApp')
           scope.bestFriends = [];
           for (var friend in top20Contacts) {
             // ID Fix below, commented out so I don't get rate limited by facebook. =)
-            // if (top20Contacts[friend][0].indexOf("@") > -1) {
-            //   var facebookEmail = top20Contacts[friend][0];
-            //   var id = facebookEmail.substring(0, top20Contacts[friend][0].indexOf("@"));
-            //   $http.get('https://graph.facebook.com/' + id).then(function(response) {
-            //     scope.bestFriends.push({
-            //       'Name': response.data.name,
-            //       'TimesContacted': top20Contacts[friend][1]
-            //     })
-            //   })
-            // } else {
+            if (top20Contacts[friend][0].indexOf("@") > -1) {
+              var facebookEmail = top20Contacts[friend][0];
+              var id = facebookEmail.substring(0, top20Contacts[friend][0].indexOf("@"));
+              $http.get('https://graph.facebook.com/' + id).then(function(response) {
+                scope.bestFriends.push({
+                  'Name': response.data.name,
+                  'TimesContacted': top20Contacts[friend][1]
+                })
+              })
+            } else {
               scope.bestFriends.push({
                 'Name': top20Contacts[friend][0],
                 'TimesContacted': top20Contacts[friend][1]
               })
-            // }
+            }
           }
         })
       }
