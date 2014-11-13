@@ -1,7 +1,14 @@
 var app = angular.module('fbDataApp', ['tc.chartjs', 'facebook-factory']);
 
 app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', function($scope, $http, facebookdata, $timeout) {
-  $http.get('../../data.json').success(function(response) {
+  function fetchData(cb) {
+    $http.get('../../data.json').success(cb).error(function(err) {
+      console.log(err)
+    });
+  }
+
+  function processData(response) {
+    $scope.loaded = true;
     $scope.response = response;
 
     // Mood based on positive and negative messages sent by year
@@ -89,7 +96,9 @@ app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', fun
       legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="padding-left:10px;margin-right:5px;background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
-  }).error(function(err) {
-    console.log(err)
-  })
+  }
+
+  $timeout(function() {
+    fetchData(processData);
+  }, 0);
 }]);

@@ -3,10 +3,11 @@
 
 <head>
   <title>Facebook Visualization</title>
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="bower_components/ionicons/css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.js"></script>
@@ -17,6 +18,12 @@
 </head>
 
 <body ng-app="fbDataApp" ng-controller="fbDataCtrl">
+  <div ng-hide="loaded" class="loading-cont">
+    <i class="ion-loading-c big-font"></i>
+    <br />
+    Loading...
+    <br />
+  </div>
   <div class="container center">
     <h1 class="title">Facebook data visualizer</h1>
     <div class="row">

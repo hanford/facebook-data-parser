@@ -17,6 +17,7 @@
     "bootstrap": "~3.3.0",
     "nvd3": "~1.1.15-beta",
     "d3": "~3.4.13",
-    "tc-angular-chartjs": "~1.0.9"
+    "tc-angular-chartjs": "~1.0.9",
+    "ionicons": "~1.5.2"
   }
 }
