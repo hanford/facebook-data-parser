@@ -6,11 +6,14 @@
   <link rel="stylesheet" type="text/css" href="bower_components/ionicons/css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/metrics-graphics/css/metricsgraphics.css">
   <link rel="stylesheet" type="text/css" href="assets/css/base.css">
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.js"></script>
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/metrics-graphics/js/metricsgraphics.js"></script>
   <script type="text/javascript" src="bower_components/nvd3/nv.d3.js"></script>
   <script type="text/javascript" src="node_modules/moment/moment.js"></script>
 </head>
@@ -26,9 +29,9 @@
     <h1 class="title">Facebook data visualizer</h1>
     <div class="row">
       <message-duration value="response.calendar"></message-duration>
+      <hourly value="response.calendar"></hourly>
       <monthly-pie value="response.monthCount"></monthly-pie>
       <weekly-pie value="response.dayCount"></weekly-pie>
-      <hourly value="response.calendar"></hourly>
     </div>
     <div class="row">
       <sentiment-friends value="response.userMessages"></sentiment-friends>
