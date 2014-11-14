@@ -4,7 +4,6 @@ angular.module('facebook-factory', [])
   return {
     yearlyActivity: function(calendar) {
       var yearlyMood = {};
-      yearlySentiment(calendar);
       function yearlySentiment(object) {
         for (var property in object) {
           if (object.hasOwnProperty(property)) {
@@ -18,6 +17,7 @@ angular.module('facebook-factory', [])
           }
         }
       }
+      yearlySentiment(calendar);
       return yearlyMood;
     },
     hourlyAct: function(calendar) {

@@ -1,29 +1,29 @@
 angular.module('fbDataApp')
 
-.directive('messageDuration', function(facebookdata) {
-  function messageDuration(value) {
+.directive('hourly', function(facebookdata) {
+  function hourly(value) {
     if (!value) {
       return
     }
-    var calendar = value;
-    var yearlyMessages = facebookdata.yearlyActivity(calendar);
-    var totalyears = facebookdata.parseYear(yearlyMessages);
-    var activity = [];
-    var yearlyActivity = [];
 
-    for (var year in totalyears) {
-      var totalSent = {
-        x: year,
-        y: totalyears[year].lengths.pos + totalyears[year].lengths.neg
+    var hourlyMessages = facebookdata.hourlyAct(value);
+
+    var activity = [];
+    for (var hour in hourlyMessages) {
+      var time = moment(hour, ['H']).format('HH');
+      var hourSent = {
+        x: time,
+        y: hourlyMessages[hour],
       }
-      activity.push(totalSent);
+      activity.push(hourSent);
     }
 
-    yearlyActivity.push({
+    var hourlyActivity = [];
+    hourlyActivity.push({
       values: activity,
       area: true,
-      color: '#405E9B',
-      key: 'messages'
+      color: '#2196F3',
+      key: 'Sent by hour'
     })
 
     nv.addGraph(function() {
@@ -38,14 +38,14 @@ angular.module('fbDataApp')
         .showXAxis(true);
 
       chart.xAxis //Chart x-axis settings
-        .axisLabel('Year')
+        .axisLabel('Hour')
         .tickFormat(d3.format('d'));
 
       chart.yAxis //Chart y-axis settings
-        .axisLabel('Number of Messages')
-        .tickFormat(d3.format('d'));
-      d3.select('#messageActivty svg') //Select the <svg> element you want to render the chart in.
-        .datum(yearlyActivity) //Populate the <svg> element with chart data...
+        .axisLabel('Number of Messages');
+        // .tickFormat(d3.format('d'));
+      d3.select('#hourly svg') //Select the <svg> element you want to render the chart in.
+        .datum(hourlyActivity) //Populate the <svg> element with chart data...
         .call(chart); //Finally, render the chart!
 
       //Update the chart when window resizes.
@@ -59,9 +59,9 @@ angular.module('fbDataApp')
   return {
     restrict: 'E',
     scope: false,
-    templateUrl: 'assets/js/templates/message-duration.html',
+    templateUrl: 'assets/js/templates/hourly.html',
     link: function(scope, element, attrs) {
-      scope.$watch(attrs.value, messageDuration.bind(scope));
+      scope.$watch(attrs.value, hourly.bind(scope));
     }
   }
 })

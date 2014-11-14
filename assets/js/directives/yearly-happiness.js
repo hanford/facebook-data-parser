@@ -29,14 +29,14 @@ angular.module('fbDataApp')
 
       avgYearlyMood.push({
         values: positiveYrly,
-        color: '#405E9B',
-        key: 'Projected Hapiness'
+        color: '#2196F3',
+        key: 'Average Positive Score'
       })
 
       avgYearlyMood.push({
         values: negativeYrly,
-        color: 'red',
-        key: 'Projected Negative'
+        color: '#F44336',
+        key: 'Average Negative Score'
       })
 
       nv.addGraph(function() {
@@ -55,7 +55,7 @@ angular.module('fbDataApp')
           .tickFormat(d3.format('d'));
 
         chart.yAxis //Chart y-axis settings
-          .axisLabel('Happiness')
+          .axisLabel('Message Tone')
           .tickFormat(d3.format('d'));
         d3.select('#yearlyhappiness svg') //Select the <svg> element you want to render the chart in.
           .datum(avgYearlyMood) //Populate the <svg> element with chart data...

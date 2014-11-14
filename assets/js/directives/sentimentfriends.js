@@ -22,12 +22,12 @@ angular.module('fbDataApp')
           var len = topFriends.length;
           var negative = {
             "key": "Negative",
-            "color": "#F3313A",
+            "color": "#F44336",
             "values": []
           };
           var positive = {
             "key": "Positive",
-            "color": "#4F6DA0",
+            "color": "#2196F3",
             "values": []
           };
           var negative20 = topFriends.slice(0, 20);
