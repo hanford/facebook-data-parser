@@ -36,8 +36,8 @@ angular.module('fbDataApp')
       data_graphic({
         title: "Message Tone",
         data: messageMood,
-        legend: ['Positive','Negative'],
-        legend_target: '.legend',
+        // legend: ['Positive','Negative'],
+        // legend_target: '.legend',
         width: 450,
         height: 320,
         target: '#messageTone',

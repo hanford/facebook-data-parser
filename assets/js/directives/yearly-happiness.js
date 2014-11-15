@@ -8,65 +8,38 @@ angular.module('fbDataApp')
       var calendar = value;
       var yearlyMessages = facebookdata.yearlyActivity(calendar);
       var totalyears = facebookdata.parseYear(yearlyMessages);
-      var avgYearlyMood = [];
       var positiveYrly = [];
       var negativeYrly = [];
 
       for (var year in totalyears) {
         if (totalyears[year].avg.pos && totalyears[year].avg.neg) {
           var pos = {
-            x: year,
-            y: totalyears[year].avg.pos
+            Year: year,
+            Average: totalyears[year].avg.pos
           }
           var neg = {
-            x: year,
-            y: totalyears[year].avg.neg
+            Year: year,
+            Average: totalyears[year].avg.neg
           }
           positiveYrly.push(pos);
           negativeYrly.push(neg);
         }
       }
 
-      avgYearlyMood.push({
-        values: positiveYrly,
-        color: '#2196F3',
-        key: 'Average Positive Score'
+      var avgYearlyMood = [];
+      avgYearlyMood.push(positiveYrly);
+      avgYearlyMood.push(negativeYrly);
+
+      data_graphic({
+        title: "Average Sentiment Score by Year",
+        data: avgYearlyMood,
+        width: 450,
+        height: 320,
+        target: '#yearlyHappiness',
+        x_accessor: 'Year',
+        y_accessor: 'Average'
       })
 
-      avgYearlyMood.push({
-        values: negativeYrly,
-        color: '#F44336',
-        key: 'Average Negative Score'
-      })
-
-      nv.addGraph(function() {
-        var chart = nv.models.lineChart()
-          .margin({
-            left: 100
-          }) //Adjust chart margins to give the x-axis some breathing room.
-          .useInteractiveGuideline(true) //We want nice looking tooltips and a guideline!
-          .transitionDuration(350) //how fast do you want the lines to transition?
-          .showLegend(false) //Show the legend, allowing users to turn on/off line series.
-          .showYAxis(false) //Show the y-axis
-          .showXAxis(true);
-
-        chart.xAxis //Chart x-axis settings
-          .axisLabel('Year')
-          .tickFormat(d3.format('d'));
-
-        chart.yAxis //Chart y-axis settings
-          .axisLabel('Message Tone')
-          .tickFormat(d3.format('d'));
-        d3.select('#yearlyhappiness svg') //Select the <svg> element you want to render the chart in.
-          .datum(avgYearlyMood) //Populate the <svg> element with chart data...
-          .call(chart); //Finally, render the chart!
-
-        //Update the chart when window resizes.
-        nv.utils.windowResize(function() {
-          chart.update()
-        });
-        return chart;
-      });
     }
     return {
       restrict: 'E',

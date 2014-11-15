@@ -16,30 +16,28 @@ angular.module('fbDataApp')
           for (var userName in message) {
             if (message[userName].hasOwnProperty('average')) {
               var messageTotal = message[userName].messages.length;
-              message[userName].messages[userName]
               friends.push([userName, messageTotal]);
             }
           }
           friends.sort(function(a, b) {
             return a[1] - b[1]
           });
-          var top20Contacts = friends.slice(friends.length - 40, friends.length).reverse();
+          var top40Contacts = friends.slice(friends.length - 40, friends.length).reverse();
           scope.bestFriends = [];
-          for (var friend in top20Contacts) {
-            // ID Fix below, commented out so I don't get rate limited by facebook. =)
-            if (top20Contacts[friend][0].indexOf("@") > -1) {
-              var facebookEmail = top20Contacts[friend][0];
-              var id = facebookEmail.substring(0, top20Contacts[friend][0].indexOf("@"));
+          for (var friend in top40Contacts) {
+            if (top40Contacts[friend][0].indexOf("@") > -1) {
+              var facebookEmail = top40Contacts[friend][0];
+              var id = facebookEmail.substring(0, top40Contacts[friend][0].indexOf("@"));
               $http.get('https://graph.facebook.com/' + id).then(function(response) {
                 scope.bestFriends.push({
                   'Name': response.data.name,
-                  'TimesContacted': top20Contacts[friend][1]
+                  'TimesContacted': top40Contacts[friend][1]
                 })
               })
             } else {
               scope.bestFriends.push({
-                'Name': top20Contacts[friend][0],
-                'TimesContacted': top20Contacts[friend][1]
+                'Name': top40Contacts[friend][0],
+                'TimesContacted': top40Contacts[friend][1]
               })
             }
           }
