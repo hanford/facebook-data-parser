@@ -1,13 +1,12 @@
 angular.module('fbDataApp')
 
-.directive('messageDuration', function(facebookdata) {
-  function messageDuration(value) {
+.directive('yearly', function(facebookdata) {
+  function yearly(value) {
     if (!value) {
       return
     }
-    var calendar = value;
-    var yearlyMessages = facebookdata.yearlyActivity(calendar);
-    var totalyears = facebookdata.parseYear(yearlyMessages);
+
+    var totalyears = value;
     var activity = [];
     var yearlyActivity = [];
 
@@ -35,7 +34,7 @@ angular.module('fbDataApp')
     scope: false,
     templateUrl: 'assets/js/templates/yearly-activity.html',
     link: function(scope, element, attrs) {
-      scope.$watch(attrs.value, messageDuration.bind(scope));
+      scope.$watch(attrs.value, yearly.bind(scope));
     }
   }
 })

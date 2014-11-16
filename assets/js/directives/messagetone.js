@@ -9,9 +9,7 @@ angular.module('fbDataApp')
       var negativeMessage = [];
       var messageMood = [];
 
-      var calendar = value;
-      var yearlyMood = facebookdata.yearlyActivity(calendar);
-      var sums = facebookdata.parseYear(yearlyMood);
+      var sums = value;
 
       for (var year in sums) {
         if (sums[year].lengths.pos && sums[year].lengths.neg) {

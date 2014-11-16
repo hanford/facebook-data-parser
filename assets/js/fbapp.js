@@ -1,6 +1,6 @@
-var app = angular.module('fbDataApp', ['facebook-factory']);
+angular.module('fbDataApp', ['facebook-factory'])
 
-app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', function($scope, $http, facebookdata, $timeout) {
+.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', function($scope, $http, facebookdata, $timeout) {
   function fetchData(cb) {
     $http.get('../../data.json').success(cb).error(function(err) {
       console.log(err)
@@ -10,6 +10,9 @@ app.controller('fbDataCtrl', ['$scope', '$http', 'facebookdata', '$timeout', fun
   function processData(response) {
     $scope.loaded = true;
     $scope.response = response;
+
+    var yearlyMood = facebookdata.yearlyActivity(response.calendar);
+    $scope.sums = facebookdata.parseYear(yearlyMood);
   }
 
   $timeout(function() {
