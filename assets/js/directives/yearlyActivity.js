@@ -34,7 +34,7 @@ angular.module('fbDataApp')
     scope: false,
     templateUrl: 'assets/js/templates/yearly-activity.html',
     link: function(scope, element, attrs) {
-      scope.$watch(attrs.value, yearly.bind(scope));
+      scope.$watch(attrs.data, yearly.bind(scope));
     }
   }
 })

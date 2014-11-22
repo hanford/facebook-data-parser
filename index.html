@@ -3,7 +3,6 @@
 
 <head>
   <title>Facebook Visualization</title>
-  <link rel="stylesheet" type="text/css" href="bower_components/ionicons/css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/metrics-graphics/css/metricsgraphics.css">
@@ -13,22 +12,28 @@
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/d3/d3.js"></script>
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="bower_components/metrics-graphics/js/metricsgraphics.js"></script>
+  <script type="text/javascript" src="bower_components/metrics-graphics/js/metricsgraphics.min.js"></script>
   <script type="text/javascript" src="bower_components/nvd3/nv.d3.js"></script>
   <script type="text/javascript" src="node_modules/moment/moment.js"></script>
 </head>
 
 <body ng-app="fbDataApp" ng-controller="fbDataCtrl">
   <div ng-hide="loaded" class="loading-cont">
-    <i class="ion-loading-c big-font"></i>
-    <br /> Loading...
+  <h3>Loading...</h3>
+    <div class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
     <br />
   </div>
   <div class="container center">
     <h1 class="title">Facebook data visualizer</h1>
     <div class="row">
-      <yearly value="sums"></yearly>
-      <hourly value="response.calendar"></hourly>
+      <yearly data="sums"></yearly>
+      <hourly data="hourly"></hourly>
       <monthly-pie value="response.monthCount"></monthly-pie>
       <weekly-pie value="response.dayCount"></weekly-pie>
     </div>
@@ -36,12 +41,12 @@
       <sentiment-friends value="response.userMessages"></sentiment-friends>
     </div>
     <div class="row">
-      <message-tone value="sums"></message-tone>
+      <message-tone data="sums"></message-tone>
       <yearly-happiness value="response.calendar"></yearly-happiness>
     </div>
     <div class="row">
       <dictionary value="response.dictionary"></dictionary>
-      <best-friends value="response"></best-friends>
+      <best-friends bestfriends="response.userMessages"></best-friends>
     </div>
   </div>
   <script type="text/javascript" src="assets/js/fbapp.js"></script>

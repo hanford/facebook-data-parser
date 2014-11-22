@@ -6,14 +6,12 @@ angular.module('fbDataApp')
       return
     }
 
-    var hourlyMessages = facebookdata.hourlyAct(value);
-
     var activity = [];
-    for (var hour in hourlyMessages) {
+    for (var hour in value) {
       var time = moment(hour, ['H']).format('HH');
       var hourSent = {
         Hour: time,
-        Sent: hourlyMessages[hour],
+        Sent: value[hour],
       }
       activity.push(hourSent);
     }
@@ -34,7 +32,7 @@ angular.module('fbDataApp')
     scope: false,
     templateUrl: 'assets/js/templates/hourly.html',
     link: function(scope, element, attrs) {
-      scope.$watch(attrs.value, hourly.bind(scope));
+      scope.$watch(attrs.data, hourly.bind(scope));
     }
   }
 })
