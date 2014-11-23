@@ -1,7 +1,6 @@
 Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>
 <br />
-<h4>Post download </h4>
-<br />
+<h3>Post download </h3>
 After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own. 
 <br />
 <br />
