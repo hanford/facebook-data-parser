@@ -1,16 +1,16 @@
 angular.module('fbDataApp')
-.directive('bestFriends', function($http) {
-  return {
-    restrict: 'E',
-    scope: false,
-    templateUrl: 'assets/js/templates/bestfriends.html',
-    link: function(scope, element, attrs) {
-      scope.$watch(attrs.bestfriends, function(friendslist) {
-        if (!friendslist) {
-          return;
-        }
+  .directive('bestFriends', function($http) {
+    return {
+      restrict: 'E',
+      scope: false,
+      templateUrl: 'assets/js/templates/bestfriends.html',
+      link: function(scope, element, attrs) {
+        scope.$watch(attrs.bestfriends, function(friendslist) {
+          if (!friendslist) {
+            return;
+          }
 
-        var friends = [];
+          var friends = [];
 
           // friendslist is grabbed from the HTML element
           for (var userName in friendslist) {
@@ -47,6 +47,6 @@ angular.module('fbDataApp')
             }
           }
         })
-}
-}
-});
+      }
+    }
+  });

@@ -1,6 +1,6 @@
 angular.module('facebook-factory', [])
 
-.factory('facebookdata', function($http, $timeout) {
+.factory('facebookdata', function($http) {
   return {
     yearlyActivity: function(calendar) {
       var yearlyMood = {};

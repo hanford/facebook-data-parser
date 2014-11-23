@@ -1,5 +1,5 @@
 angular.module('fbDataApp')
-.directive('messageTone', function(facebookdata) {
+.directive('messageTone', function() {
   function messageMood(value) {
     if (!value) {
       return

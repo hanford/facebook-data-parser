@@ -1,6 +1,6 @@
 angular.module('fbDataApp')
 
-.directive('hourly', function(facebookdata) {
+.directive('hourly', function() {
   function hourly(value) {
     if (!value) {
       return

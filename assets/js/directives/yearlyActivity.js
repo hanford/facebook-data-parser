@@ -1,6 +1,6 @@
 angular.module('fbDataApp')
 
-.directive('yearly', function(facebookdata) {
+.directive('yearly', function() {
   function yearly(value) {
     if (!value) {
       return

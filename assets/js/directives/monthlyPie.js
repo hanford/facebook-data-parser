@@ -1,6 +1,6 @@
 angular.module('fbDataApp')
 
-.directive('monthlyPie', function(facebookdata) {
+.directive('monthlyPie', function() {
   function monthlyPie(value) {
     if (!value) {
       return;
@@ -12,7 +12,7 @@ angular.module('fbDataApp')
       var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       messageMonthlyCount.push({
         label: month[monthLabel++],
-        value: monthCount[prop]
+        value: Math.ceil(monthCount[prop])
       })
     }
     nv.addGraph(function() {

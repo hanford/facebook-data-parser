@@ -19,7 +19,6 @@
 
 <body ng-app="fbDataApp" ng-controller="fbDataCtrl">
   <div ng-hide="loaded" class="loading-cont">
-  <h3>Loading...</h3>
     <div class="spinner">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -38,11 +37,11 @@
       <weekly-pie value="response.dayCount"></weekly-pie>
     </div>
     <div class="row">
-      <sentiment-friends value="response.userMessages"></sentiment-friends>
+      <sentiment-friends friends="friends"></sentiment-friends>
     </div>
     <div class="row">
       <message-tone data="sums"></message-tone>
-      <yearly-happiness value="response.calendar"></yearly-happiness>
+      <yearly-happiness value="sums"></yearly-happiness>
     </div>
     <div class="row">
       <dictionary value="response.dictionary"></dictionary>

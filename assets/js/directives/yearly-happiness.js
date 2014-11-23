@@ -1,25 +1,22 @@
 angular.module('fbDataApp')
-  .directive('yearlyHappiness', function(facebookdata) {
+  .directive('yearlyHappiness', function() {
     function happiness(value) {
       if (!value) {
         return
       }
 
-      var calendar = value;
-      var yearlyMessages = facebookdata.yearlyActivity(calendar);
-      var totalyears = facebookdata.parseYear(yearlyMessages);
       var positiveYrly = [];
       var negativeYrly = [];
 
-      for (var year in totalyears) {
-        if (totalyears[year].avg.pos && totalyears[year].avg.neg) {
+      for (var year in value) {
+        if (value[year].avg.pos && value[year].avg.neg) {
           var pos = {
             Year: year,
-            Average: totalyears[year].avg.pos
+            Average: value[year].avg.pos
           }
           var neg = {
             Year: year,
-            Average: totalyears[year].avg.neg
+            Average: value[year].avg.neg
           }
           positiveYrly.push(pos);
           negativeYrly.push(neg);

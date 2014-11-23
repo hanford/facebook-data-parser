@@ -1,5 +1,5 @@
 angular.module('fbDataApp')
-  .directive('weeklyPie', function(facebookdata) {
+  .directive('weeklyPie', function() {
     return {
       restrict: 'E',
       scope: false,
@@ -14,8 +14,9 @@ angular.module('fbDataApp')
           for (var prop in dayCount) {
             messageWeekdays.push({
               label: prop,
-              value: dayCount[prop]
+              value: Math.ceil(dayCount[prop])
             })
+
           }
           nv.addGraph(function() {
             var chart = nv.models.pieChart()

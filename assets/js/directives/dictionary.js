@@ -1,5 +1,5 @@
 angular.module('fbDataApp')
-.directive('dictionary', function(facebookdata) {
+.directive('dictionary', function() {
   return {
     restrict: 'E',
     scope: false,

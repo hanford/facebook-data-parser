@@ -1,17 +1,15 @@
 angular.module('fbDataApp')
-  .directive('sentimentFriends', function(facebookdata, $http) {
+  .directive('sentimentFriends', function($http) {
     return {
       restrict: 'E',
       scope: false,
       templateUrl: 'assets/js/templates/sentiment.html',
       link: function(scope, element, attrs) {
-        scope.$watch(attrs.value, function(value) {
+        scope.$watch(attrs.friends, function(userFormatted) {
 
-          if (!value) {
+          if (!userFormatted) {
             return;
           }
-
-          var userFormatted = facebookdata.setFriends(value);
 
           userFormatted.sort(function(a, b) {
             return a[2] - b[2]

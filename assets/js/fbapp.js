@@ -13,6 +13,7 @@ angular.module('fbDataApp', ['facebook-factory'])
 
     var yearlyMood = facebookdata.yearlyActivity(response.calendar);
     $scope.hourly = facebookdata.hourlyAct(response.calendar);
+    $scope.friends = facebookdata.setFriends(response.userMessages);
     $scope.sums = facebookdata.parseYear(yearlyMood);
   }
 
