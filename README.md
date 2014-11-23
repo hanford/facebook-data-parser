@@ -1,12 +1,27 @@
-parse data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>
+Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>
 <br />
-<h4>Post download..</h4>
-<code>bower i</code>
+<h4>Post download </h4>
+<br />
+After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own. 
+<br />
+<br />
+First extract facebook.zip in the current directory and then
+<br />
 <br />
 <code>npm install</code>
 <br />
 <br />
-Then drag the facebook-USERNAME.zip into the folder the script is in, extract file, rename the directory to just "facebook", run <code>node app</code>. Finally run <code>python -m SimpleHTTPServer</code> and in your browser visit <a href="http://localhost:8000">localhost:8000</a>
+<code>bower install</code>
+<br />
+<br />
+<code>node app</code>
+<br />
+<br />
+<code>python -m SimpleHTTPServer</code>
+<br />
+<br />
+Then in your web browser go to the url  <a href="http://localhost:8000">localhost:8000</a>
+<br />
 <br />
 Report any bugs to <a href="mailto:jackhanford@gmail.com">jackhanford@gmail.com</a>
 <br />
