@@ -1,18 +1,16 @@
-var fs = require('fs');
-var moment = require('moment');
-var he = require('he');
-var sentiment = require('sentiment');
-var HTMLParser = require('fast-html-parser');
+var fs = require('fs'),
+    moment = require('moment'),
+    he = require('he'),
+    sentiment = require('sentiment'),
+    HTMLParser = require('fast-html-parser');
 
-// Will use for names returned as id@facebook.com
-// var FB = require('fb');
-// FB.setAccessToken('token');
 fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
   if (err) throw err;
-  var root = HTMLParser.parse(content.toString());
-  var user = root.querySelectorAll('.user');
-  var message = root.querySelectorAll('p');
-  var time = root.querySelectorAll('.meta');
+
+  var root = HTMLParser.parse(content.toString()),
+      user = root.querySelectorAll('.user'),
+      message = root.querySelectorAll('p'),
+      time = root.querySelectorAll('.meta');
 
   // Grabbing users full
   var name = root.querySelectorAll('h1');
@@ -20,11 +18,11 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     fullname = element.childNodes[0].rawText;
   })
 
-  var calendar = {};
-  var userMessages = {};
-  var dict = {};
-  var dayCount = {};
-  var monthCount = {};
+  var calendar = {},
+      userMessages = {},
+      dict = {},
+      dayCount = {},
+      monthCount = {};
 
   // var stream = fs.createWriteStream('data.csv');
   // stream.write('key, value, date' + '\n');
@@ -32,11 +30,11 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     console.log(idx + ' messages');
 
     if (element.childNodes.length == 0) return;
-    var timestamp = time[idx].childNodes[0].rawText;
 
-    var userName = he.decode(user[idx].childNodes[0].rawText);
-    var messageTxt = he.decode(element.childNodes[0].rawText);
-    var eachWord = element.childNodes[0].rawText.split(' ');
+    var timestamp = time[idx].childNodes[0].rawText,
+        userName = he.decode(user[idx].childNodes[0].rawText),
+        messageTxt = he.decode(element.childNodes[0].rawText),
+        eachWord = element.childNodes[0].rawText.split(' ');
 
     if (userName == fullname) {
       eachWord.map(function(word) {
@@ -49,8 +47,8 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     }
 
     // Timestamp pre moment - Monday, September 10, 2012 at 10:51pm PDT
-    var parts = timestamp.split(', ');
-    var day = parts[0];
+    var parts = timestamp.split(', '),
+        day = parts[0];
 
     dayCount[day] ? dayCount[day] ++ : dayCount[day] = 1;
 
@@ -61,13 +59,13 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
     }, '');
 
     // Sentiment on facebook message, returns contextual mood of message
-    var sentimentScore = sentiment(messageTxt).score;
+    var sentimentScore = sentiment(messageTxt).score,
+        stamp = moment(timestamp, ['MMM D YYYY at h:mA']),
+        stampYear = stamp.year(),
+        stampMonth = stamp.month(),
+        stampDay = stamp.date();
 
-    var stamp = moment(timestamp, ['MMM D YYYY at h:mA']);
-    var stampYear = stamp.year();
-    var stampMonth = stamp.month();
     monthCount[stampMonth] ? monthCount[stampMonth] ++ : monthCount[stampMonth] = 1;
-    var stampDay = stamp.date();
     // var messageDate = stampMonth + '/' + stampDay + '/' + stampYear;
     // stream.write(userName + ',' + sentimentScore + ',' + messageDate + '\n');
 
