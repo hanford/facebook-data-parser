@@ -1,18 +1,14 @@
 Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>
 <br />
-<h3>Post download </h3>
-After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own. 
-<br />
-<br />
-First extract facebook.zip in the current directory and then
-<br />
-<br />
-<code>npm install</code>
-<br />
-<br />
-<code>bower install</code>
-<br />
-<br />
+### Post download 
+After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own.  
+
+First extract facebook.zip in the current directory and then  
+
+<code>npm install</code>  
+
+<code>bower install</code>  
+
 <code>node app</code>
 <br />
 <br />
