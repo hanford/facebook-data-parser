@@ -1,7 +1,11 @@
-Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>
-<br />
+### Found out how to download your facebook data below
+
+Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>  
+
 ### Post download 
 After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own.  
+
+### Parse your own data manually
 
 First extract facebook.zip in the current directory and then  
 
@@ -9,20 +13,16 @@ First extract facebook.zip in the current directory and then
 
 <code>bower install</code>  
 
-<code>node app</code>
-<br />
-<br />
-<code>python -m SimpleHTTPServer</code>
-<br />
-<br />
-Then in your web browser go to the url  <a href="http://localhost:8000">localhost:8000</a>
-<br />
-<br />
-Report any bugs to <a href="mailto:jackhanford@gmail.com">jackhanford@gmail.com</a>
-<br />
-<br />
-**LICENSE:**
-<br />
+<code>node app</code>  
+
+<code>python -m SimpleHTTPServer</code>  
+
+Then in your web browser go to the url  <a href="http://localhost:8000">localhost:8000</a>  
+
+Report any bugs to <a href="mailto:jackhanford@gmail.com">jackhanford@gmail.com</a>  
+
+**LICENSE:**  
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
