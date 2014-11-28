@@ -48,7 +48,7 @@ fs.readFile('./facebook/html/messages.htm', 'utf8', function(err, content) {
 
     // Timestamp pre moment - Monday, September 10, 2012 at 10:51pm PDT
     var parts = timestamp.split(', '),
-        day = parts[0];
+      day = parts[0];
 
     dayCount[day] ? dayCount[day] ++ : dayCount[day] = 1;
 

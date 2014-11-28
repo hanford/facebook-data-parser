@@ -17,8 +17,6 @@ angular.module('fbDataApp', ['facebook-factory'])
     $scope.sums = facebookdata.parseYear(yearlyMood);
   }
 
-
-
   $timeout(function() {
     fetchData(processData);
   }, 0);
