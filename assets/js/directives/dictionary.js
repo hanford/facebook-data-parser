@@ -1,23 +1,22 @@
 angular.module('fbDataApp')
-.directive('dictionary', function() {
-  return {
-    restrict: 'E',
-    scope: false,
-    templateUrl: 'assets/js/templates/dictionary.html',
-    link: function(scope, element, attrs) {
-      scope.$watch(attrs.value, function(value) {
-        if (!value) {
+  .directive('dictionary', function() {
+    return {
+      restrict: 'E',
+      scope: false,
+      templateUrl: 'assets/js/templates/dictionary.html',
+      link: function(scope, element, attrs) {
+        scope.$watch(attrs.value, function (wordList) {
+        if (!wordList) {
           return;
         }
 
         var wordCount = [];
 
-        var dictionary = value;
-        for (var word in dictionary) {
-          if (dictionary[word] > 200 && word.length > 0) {
+        for (var word in wordList) {
+          if (wordList[word] > 200 && word.length > 0) {
             var commonWords = {
               'text': word,
-              'count': dictionary[word]
+              'count': wordList[word]
             };
             wordCount.push(commonWords)
           }
@@ -27,10 +26,9 @@ angular.module('fbDataApp')
           return a.count - b.count
         });
 
-        // Top 40 words
         scope.words = wordCount.reverse().slice(0, 40);
 
-      })
+      });
     }
   }
-});
+})

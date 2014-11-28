@@ -1,13 +1,8 @@
 angular.module('fbDataApp')
   .directive('sentimentFriends', function($http) {
-    return {
-      restrict: 'E',
-      scope: false,
-      templateUrl: 'assets/js/templates/sentiment.html',
-      link: function(scope, element, attrs) {
-        scope.$watch(attrs.friends, function(userFormatted) {
 
-          if (!userFormatted) {
+    function sentimentFriend(userFormatted) {
+      if (!userFormatted) {
             return;
           }
 
@@ -104,6 +99,7 @@ angular.module('fbDataApp')
             nv.utils.windowResize(chart.update);
             return chart;
           });
+
           nv.addGraph(function() {
             var chart = nv.models.multiBarHorizontalChart()
               .x(function(d) {
@@ -130,7 +126,14 @@ angular.module('fbDataApp')
             nv.utils.windowResize(chart.update);
             return chart;
           });
-        })
+    }
+
+    return {
+      restrict: 'E',
+      scope: false,
+      templateUrl: 'assets/js/templates/sentiment.html',
+      link: function(scope, element, attrs) {
+        scope.$watch(attrs.friends, sentimentFriend.bind(scope));
       }
     }
   })
