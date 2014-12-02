@@ -1,11 +1,10 @@
+<a href="http://jackhanford.com/facebook-data-parse">Landing page</a>
+
 ### Found out how to download your facebook data below
 
-Parse your data <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>  
+Parse your data manually <a href="https://www.facebook.com/help/212802592074644">downloaded from facebook</a>  
 
-### Post download 
-After you download your data from facebook, drag that zip file into this directory. From here you can either run <code>./run-all.sh</code> in terminal which will automatically run the nessasary commands. Or you can run the app on your own.  
-
-### Parse your own data manually
+### Parse your data
 
 First extract facebook.zip in the current directory and then  
 
