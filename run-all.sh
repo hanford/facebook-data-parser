@@ -1,7 +1,7 @@
 function pause(){
    read -p "$*"
 }
-pause 'Press [enter] to begin the script, make sure you have bower and node installed'
+pause 'Only continue if you have both Node and Bower installed! If you do, press [enter]'
 mkdir facebook
 echo "Moving facebook.zip"
 mv facebook.zip facebook
