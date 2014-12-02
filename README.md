@@ -1,4 +1,4 @@
-<a href="http://jackhanford.com/facebook-data-parse">Landing page</a>
+<a href="http://jackhanford.com/facebook-data-visualizer/">Landing page</a>
 
 ### Found out how to download your facebook data below
 
