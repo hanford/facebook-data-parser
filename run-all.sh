@@ -14,10 +14,12 @@ mv facebook.zip ../
 cd ../
 echo "Grabbing node modules.."
 npm install
-sleep 3
+sleep 4
 echo "Starting Node Script"
 node app
 echo "Getting Bower packages"
 bower i
 echo "Starting Server"
-open "http://localhost:8000" & python -m SimpleHTTPServer
+python -m SimpleHTTPServer
+sleep 3
+open "http://localhost:8000" 
